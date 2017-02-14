@@ -2,10 +2,12 @@
 //
 
 #include "stdafx.h"
-
+#include "Toptal.h"
 
 int main()
 {
+	Toptal toptal;
+	toptal.Q1();
     return 0;
 }
 
