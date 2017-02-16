@@ -33,6 +33,6 @@ void Toptal::Q5()
 Implement a template function IsDerivedFrom() that takes class C and class P as template parameters.
 It should return true when class C is derived from class P and false otherwise.
 */
-template <typename T> bool Toptal::IsDerivedFrom(T C, T P) {
-
+template <class T, class Y> bool Toptal::IsDerivedFrom(T C, Y P) {
+	return std::is_base_of(C, P)::value;
 }

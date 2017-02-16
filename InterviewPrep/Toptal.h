@@ -9,7 +9,5 @@ public:
 
 	void Q1();
 	void Q5();
-	template<typename T> bool IsDerivedFrom(T C, T P);
-
+	template<typename T, typename Y> bool IsDerivedFrom(T C, Y P);
 };
-

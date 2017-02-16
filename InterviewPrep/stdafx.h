@@ -9,7 +9,12 @@
 
 #include <stdio.h>
 #include <tchar.h>
-
+#include <type_traits>
+#include <vector>
+#include <iostream>
+#include <list>
+#include <map>
+#include <string>
 
 
 // TODO: reference additional headers your program requires here
