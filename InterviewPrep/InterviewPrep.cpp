@@ -4,7 +4,7 @@
 int main()
 {
 	Udemy u;
-	u.Map();
+	u.MultiMap();
     return 0;
 }
 

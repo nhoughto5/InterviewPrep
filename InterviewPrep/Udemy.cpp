@@ -16,8 +16,8 @@ void Udemy::TwoDVector()
 	//Create a 2D vector with 3 rows and 4 columns;
 	std::vector<std::vector<int>> grid(3, std::vector<int>(4, 0));
 
-	for (int row = 0; row < grid.size(); ++row) {
-		for (int col = 0; col < grid[row].size(); ++col) {
+	for (size_t row = 0; row < grid.size(); ++row) {
+		for (size_t col = 0; col < grid[row].size(); ++col) {
 			std::cout << grid[row][col] << std::flush;
 		}
 		std::cout << std::endl;
@@ -61,6 +61,41 @@ void Udemy::Map()
 	ages["Vicky"] = 25;
 
 	for (std::map<std::string, int>::iterator it = ages.begin(); it != ages.end(); ++it) {
+		std::cout << it->first << ": " << it->second << std::endl;
+	}
+}
+
+void Udemy::ObjectInMap()
+{
+	std::map<Person, int> people;
+
+	people[Person("Mike", 40)] = 40;
+	people[Person("Viki", 100)] = 41;
+	people[Person("Raj", 140)] = 42;
+
+	for (std::map<Person, int>::iterator it = people.begin(); it != people.end(); ++it) {
+		it->first.print();
+		std::cout << it->second << std::endl;
+	}
+}
+
+void Udemy::MultiMap()
+{
+	std::multimap<int, std::string> lookup;
+
+	lookup.insert(std::make_pair(30, "Mike"));
+	lookup.insert(std::make_pair(10, "Steve"));
+	lookup.insert(std::make_pair(30, "nick"));
+	lookup.insert(std::make_pair(20, "Devon"));
+
+	for (std::multimap<int, std::string>::iterator it = lookup.find(30); it != lookup.end(); ++it) {
+		std::cout << it->first << ": " << it->second << std::endl;
+	}
+
+	std::cout << std::endl;
+	auto its = lookup.equal_range(30);
+
+	for (std::multimap<int, std::string>::iterator it = its.first; it != its.second; ++it) {
 		std::cout << it->first << ": " << it->second << std::endl;
 	}
 }
