@@ -10,5 +10,6 @@ public:
 	void typeId();
 	void Auto();
 	void nestedTemplateClasses();
+	void Initialization();
 };
 

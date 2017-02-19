@@ -53,15 +53,45 @@ void C_PP_11::nestedTemplateClasses()
 	textRing.add("three");
 	textRing.add("four");
 
-	//for (int i = 0; i < textRing.size(); ++i) {
-	//	cout << textRing.get(i) << endl;
-	//}
-
 	for (string value : textRing) {
 		cout << value << endl;
 	}
-	//for (ring<string>::iterator it = textRing.begin(); it != textRing.end(); ++it) {
-	//	string t = *it;
-	//	cout << t << endl;
-	//}
 }
+
+/*
+	Cpp 11 allows a lot more capability to
+		initialize variables with {}
+*/
+void C_PP_11::Initialization()
+{
+	int value{ 5 };
+	cout << value << endl;
+
+	string valueStr{ "Nick" };
+	cout << valueStr << endl;
+
+	int* pInts = new int[3]{ 1,2,3 };
+	cout << pInts[2] << endl;
+
+	int value0{  };
+	cout << value0 << endl;
+
+	int *pSomething{ &value };
+	cout << *pSomething << endl;
+
+	int *pSomething2{}; // same as nullptr
+	cout << pSomething2 << endl;
+
+	int numbers1[5]{}; //Init all values to 0
+	cout << numbers1[2] << endl;
+
+	struct {
+		int value;
+		string text;
+	} s1{ 5, "Hi" };
+	cout << s1.text << ": " << s1.value << endl;
+
+	vector<string> strings{ "one", "two", "Bowl" };
+	cout << strings[2] << endl;
+}
+
