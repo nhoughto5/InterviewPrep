@@ -225,4 +225,47 @@ void Udemy::ObjectSplitting()
 	p2.print();
 }
 
+void Udemy::AbstractClassesAndPureVirtualFunctions()
+{
+	Labrador lab;
+	lab.run();
+	lab.speak();
+
+
+	//Can create pointers to animal
+	Animal *animals[5];
+	animals[0] = &lab;
+
+	animals[0]->speak();
+}
+
+struct Test {
+	virtual bool operator()(std::string &text) = 0;
+
+	virtual ~Test() {}
+};
+
+// Functors overload the () operator.
+struct MatchTest : public Test{
+	bool operator()(std::string &text) {
+		return text.compare("lion") == 0;
+	}
+};
+
+void check(std::string text, Test &test) {
+	if(test(text)){
+		std::cout << "Text Matches\n";
+	}
+	else {
+		std::cout << "No Match\n";
+	}
+}
+//An alternative to function pointers
+void Udemy::Functors()
+{
+	MatchTest pred;
+	std::string value = "lion";
+	check(value, pred);
+}
+
 

@@ -22,5 +22,11 @@
 #include <algorithm>
 #include "Parent.h"
 #include "Child.h"
+#include "Animal.h"
+#include "Dog.h"
+#include "Labrador.h"
+#include "C_PP_11.h"
+#include <typeinfo>
+#include "ring.h"
 
 // TODO: reference additional headers your program requires here

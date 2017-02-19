@@ -32,6 +32,10 @@ public:
 	void functionPointerMatch();
 
 	void ObjectSplitting();
+
+	void AbstractClassesAndPureVirtualFunctions();
+
+	void Functors();
 };
 
 // Again, better to do template definitions in header files.
