@@ -15,6 +15,9 @@
 #include <list>
 #include <map>
 #include <string>
+#include <stack>
+#include <queue>
+#include "Complex.h"
 
 
 // TODO: reference additional headers your program requires here

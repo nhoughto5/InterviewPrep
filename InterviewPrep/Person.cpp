@@ -2,7 +2,7 @@
 #include "Person.h"
 
 
-Person::Person() : 
+Person::Person() :
 	name(""),
 	age(0)
 {
@@ -29,9 +29,18 @@ Person::Person(std::string name_, int age_) :
 {
 }
 
+//Move Assignment Operator
+const Person & Person::operator=(const Person &other)
+{
+	age = other.age;
+	name = other.name;
+	return *this;
+}
+
 Person::~Person()
 {
 }
+
 void Person::print() const {
 	std::cout << name << ": " << age << std::endl;
 }
@@ -50,3 +59,4 @@ bool Person::operator==(const Person & other) const
 {
 	return (name.compare(other.name) == 0) && (age == other.age);
 }
+

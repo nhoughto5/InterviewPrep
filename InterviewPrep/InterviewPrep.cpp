@@ -4,7 +4,7 @@
 int main()
 {
 	Udemy u;
-	u.MultiMap();
+	u.ComplexNumber();
     return 0;
 }
 

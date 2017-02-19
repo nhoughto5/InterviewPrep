@@ -12,5 +12,13 @@ public:
 
 	void ObjectInMap();
 	void MultiMap();
+
+	void Stack();
+
+	void SortVector();
+
+	void LeftBitShiftOverload();
+
+	void ComplexNumber();
 };
 

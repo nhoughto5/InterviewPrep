@@ -99,3 +99,61 @@ void Udemy::MultiMap()
 		std::cout << it->first << ": " << it->second << std::endl;
 	}
 }
+
+void Udemy::Stack()
+{
+	std::stack<Person> testStack;
+	testStack.push(Person("Mike", 45));
+	testStack.push(Person("John", 48));
+	testStack.push(Person("Ed", 47));
+	testStack.push(Person("Steve", 46));
+
+	Person testPerson = testStack.top();
+	testPerson.print();
+}
+
+//A Friend of Person Class
+bool compare(const Person& A, const Person& B) {
+	return A.age < B.age;
+}
+
+void Udemy::SortVector()
+{
+	std::vector<Person> vector;
+
+	vector.push_back(Person("Mike", 45));
+	vector.push_back(Person("John", 48));
+	vector.push_back(Person("Ed", 47));
+	vector.push_back(Person("Steve", 46));
+
+	//Uses < operator overloaded by Person
+	//std::sort(vector.begin(), vector.end());
+
+	//Uses a function pointer with a friend method.
+	std::sort(vector.begin(), vector.end(), compare);
+
+	for (Person p : vector) {
+		p.print();
+	}
+}
+
+void Udemy::LeftBitShiftOverload()
+{
+	Person Me("Nick", 28);
+
+	std::cout << Me << std::endl;
+}
+
+void Udemy::ComplexNumber()
+{
+	Complex c1(3, 4.6);
+	Complex c2(10, 41);
+
+	std::cout << c1 + c2 << std::endl;
+	std::cout << c1 - c2 << std::endl;
+	std::cout << c1 + 7 << std::endl;
+	std::cout << 7 + c1 << std::endl;
+	std::cout << *c1 << std::endl;
+}
+
+
