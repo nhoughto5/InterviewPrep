@@ -4,7 +4,7 @@
 int main()
 {
 	Udemy u;
-	u.ComplexNumber();
+	u.ObjectSplitting();
     return 0;
 }
 

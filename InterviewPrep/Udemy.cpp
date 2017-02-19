@@ -156,4 +156,73 @@ void Udemy::ComplexNumber()
 	std::cout << *c1 << std::endl;
 }
 
+void Udemy::TemplateClass()
+{
+	TestTemplate<std::string> test1("Hello");
+	test1.print();
+}
+
+void Udemy::testTemplateMethod()
+{
+	templatePrint(Person("Nick", 28));
+}
+
+
+void test(int value) {
+	std::cout << "Function pointer: " << value << std::endl;
+}
+
+void Udemy::functionPointers()
+{
+	//Function pointer to test.
+	void (*pTest)(int) = test;
+
+	//Calls test method
+	pTest(6);
+}
+
+bool match(std::string test) {
+	return test.compare("Two") == 0;
+}
+
+int countStrings(std::vector<std::string> &texts, bool (*match)(std::string test)) {
+	int count = 0;
+	for (std::string S : texts) {
+		if (match(S)) { ++count; }
+	}
+	return count;
+}
+void Udemy::functionPointerMatch()
+{
+	std::vector<std::string> texts;
+	texts.push_back("One");
+	texts.push_back("Two");
+	texts.push_back("Tree");
+	texts.push_back("Plant");
+	texts.push_back("Orange");
+	texts.push_back("Moo");
+	texts.push_back("Two");
+
+
+	std::cout << countStrings(texts, match) << std::endl;
+}
+
+/*
+	Slicing away a part of the child.
+	When the copy constructor is run on the parent class
+		we can not determine what to do with the childs
+		member 'two'.
+*/
+void Udemy::ObjectSplitting()
+{
+	Child c1;
+	Parent &p1 = c1;
+	p1.print();
+
+	// Known as 'Up casting'
+	// Causes Object slicing
+	Parent p2 = Child();
+	p2.print();
+}
+
 

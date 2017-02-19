@@ -18,6 +18,9 @@
 #include <stack>
 #include <queue>
 #include "Complex.h"
-
+#include "TestTemplate.h"
+#include <algorithm>
+#include "Parent.h"
+#include "Child.h"
 
 // TODO: reference additional headers your program requires here
