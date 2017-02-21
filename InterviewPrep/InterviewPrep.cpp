@@ -5,7 +5,7 @@
 int main()
 {
 	C_PP_11 c;
-	c.LambdaCaptureThis();
+	c.DelegatingConstructors();
     return 0;
 }
 

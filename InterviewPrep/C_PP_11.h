@@ -17,5 +17,8 @@ public:
 	void LambdaExpressions2();
 	void LambdaCaptureExpressions();
 	void LambdaCaptureThis();
+	void StandardFunctionType();
+	void MutableLambdas();
+	void DelegatingConstructors();
 };
 

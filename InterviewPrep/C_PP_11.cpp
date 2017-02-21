@@ -240,3 +240,84 @@ void C_PP_11::LambdaCaptureThis()
 	test.run();
 }
 
+bool check(string &test) {
+	return test.size() == 3;
+}
+
+class Check {
+public:
+	bool operator()(string &test) {
+		return test.size() == 5;
+	}
+} check1;
+
+// Run accepts anything that is callable which
+//	returns bool and accepts a string reference
+void run(function<bool(string&)> check) {
+	string test = "dog";
+	cout << check(test) << endl;
+}
+void C_PP_11::StandardFunctionType()
+{
+	vector<string> vec{ "One", "Two", "Three" };
+	int size = 5;
+
+	// Lambda Expression
+	auto lambda = [size](string test) {return test.size() == size; };
+	cout << count_if(vec.begin(), vec.end(), lambda) << endl;
+
+	// Function pointer
+	cout << count_if(vec.begin(), vec.end(), check) << endl;
+
+	// Functor
+	cout << count_if(vec.begin(), vec.end(), check1) << endl;
+
+	run(lambda);
+	run(check);
+	run(check1);
+
+	function<int(int, int)> add = [](int one, int two) {return one + two; };
+	cout << add(7, 3) << endl;
+}
+
+// Use of mutable keyword allows the ability to modify the 
+// value passed in.
+void C_PP_11::MutableLambdas()
+{
+	int cats = 5;
+	auto cat = [cats]() mutable {
+		cout << cats << endl;
+		cats = 8;
+		cout << cats << endl;
+	};
+
+	cat();
+	cout << cats << endl;
+}
+
+void C_PP_11::DelegatingConstructors()
+{
+	class L_Parent {
+	public:
+		L_Parent() : L_Parent("Hello") {
+			cout << "No parameter parent Constructor" << endl;
+		}
+		L_Parent(string text) {
+			this->text = text;
+			cout << "String Parent Constructor" << endl;
+		}
+	private:
+		int dogs{ 5 };
+		string text;
+	};
+
+	class L_Child : public L_Parent {
+	public:
+		L_Child() = default;
+	private:
+	};
+
+	L_Parent parent("Hello");
+	L_Child child;
+}
+

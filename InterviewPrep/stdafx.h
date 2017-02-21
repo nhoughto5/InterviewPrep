@@ -29,5 +29,7 @@
 #include <typeinfo>
 #include "ring.h"
 #include <initializer_list>
+#include <functional>
+#include <algorithm>
 
 // TODO: reference additional headers your program requires here
