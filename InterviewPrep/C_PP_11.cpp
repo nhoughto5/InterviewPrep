@@ -320,4 +320,106 @@ void C_PP_11::DelegatingConstructors()
 	L_Parent parent("Hello");
 	L_Child child;
 }
+class L_Test {
+public:
+	L_Test() {
+		cout << "L_Test: Constructor" << endl;
+		m_pBuffer = new int[SIZE] {}; //Zeroes all bytes in array
+	}
+
+	L_Test(int id) {
+		cout << "L_Test: Parameter Constructor" << endl;
+		m_pBuffer = new int[SIZE] {}; //Zeroes all bytes in array
+		for (int i = 0; i < SIZE; ++i) {
+			m_pBuffer[i] = 7 * i;
+		}
+	}
+
+	L_Test(const L_Test &other) {
+		cout << "L_Test: Copy constructor" << endl;
+		m_pBuffer = new int[SIZE] {}; //Zeroes all bytes in array
+		memcpy(m_pBuffer, other.m_pBuffer, SIZE * sizeof(int)); //Copy contents of array
+	}
+
+	L_Test &operator=(const L_Test& other) {
+		cout << "L_Test: assignment" << endl;
+		m_pBuffer = new int[SIZE] {}; //Zeroes all bytes in array
+		memcpy(m_pBuffer, other.m_pBuffer, SIZE * sizeof(int)); //Copy contents of array
+		return *this;
+	}
+
+	~L_Test() {
+		cout << "L_Test: Destructor" << endl;
+		delete[] m_pBuffer;
+	}
+
+	friend ostream &operator<<(ostream &out, const L_Test &test);
+private:
+	int * m_pBuffer;
+	static const int SIZE = 100;
+};
+
+ostream &operator<<(ostream &out, const L_Test &test) {
+	out << "L_Test: Left-Shift";
+	return out;
+}
+L_Test getLTest() {
+	return L_Test();
+}
+void C_PP_11::EllisionAndOptimization()
+{
+	/*
+		 Copy ellision (C++ 98) reduces the number of times a constructor is called.
+		 Example:
+
+			Test getTest() {
+				return Test();
+			}
+			Test test = getTest();
+		
+		Calls:
+			constructor
+			copy constructor
+			destructor
+			copy constructor
+			destructor
+			copy operator
+			destructor
+
+		Copy ellision reduces this to:
+			constructor
+			copy operator
+			destructor
+	*/
+}
+
+/*
+	RValues are commonly temporary values.
+	Can't take the address of RValues
+	Can take the address of LValues
+*/
+void C_PP_11::RValue_LValueReferences()
+{
+	// C98
+	// LValue = RValue
+	int value1 = 7;
+
+	int *pValue1 = &value1;
+
+	L_Test test1 = getLTest();
+	L_Test *pTest = &test1;
+
+	int *pValue = &++value1;
+	cout << *pValue << endl;
+
+	/*
+		int *pValue4 = &value1++;
+		Trying to take the address of the temporary (RValue) so will not work.
+
+		Same with:
+		int *s = &(7 + value1);
+	*/
+
+
+}
 

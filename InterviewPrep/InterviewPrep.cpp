@@ -5,7 +5,7 @@
 int main()
 {
 	C_PP_11 c;
-	c.DelegatingConstructors();
+	c.RValue_LValueReferences();
     return 0;
 }
 

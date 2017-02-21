@@ -20,5 +20,7 @@ public:
 	void StandardFunctionType();
 	void MutableLambdas();
 	void DelegatingConstructors();
+	void EllisionAndOptimization();
+	void RValue_LValueReferences();
 };
 
