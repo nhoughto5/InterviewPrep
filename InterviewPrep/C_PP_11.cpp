@@ -323,44 +323,59 @@ void C_PP_11::DelegatingConstructors()
 class L_Test {
 public:
 	L_Test() {
-		cout << "L_Test: Constructor" << endl;
+		//cout << "L_Test: Constructor" << endl;
 		m_pBuffer = new int[SIZE] {}; //Zeroes all bytes in array
 	}
 
 	L_Test(int id) {
-		cout << "L_Test: Parameter Constructor" << endl;
+		//cout << "L_Test: Parameter Constructor" << endl;
 		m_pBuffer = new int[SIZE] {}; //Zeroes all bytes in array
 		for (int i = 0; i < SIZE; ++i) {
 			m_pBuffer[i] = 7 * i;
 		}
 	}
+	
+	L_Test(L_Test &&other) {
+		cout << "Move Constructor" << endl;
+		m_pBuffer = other.m_pBuffer;
+		other.m_pBuffer = nullptr;
+	}
 
 	L_Test(const L_Test &other) {
-		cout << "L_Test: Copy constructor" << endl;
+		//cout << "L_Test: Copy constructor" << endl;
 		m_pBuffer = new int[SIZE] {}; //Zeroes all bytes in array
 		memcpy(m_pBuffer, other.m_pBuffer, SIZE * sizeof(int)); //Copy contents of array
 	}
 
 	L_Test &operator=(const L_Test& other) {
-		cout << "L_Test: assignment" << endl;
+		//cout << "L_Test: assignment" << endl;
 		m_pBuffer = new int[SIZE] {}; //Zeroes all bytes in array
 		memcpy(m_pBuffer, other.m_pBuffer, SIZE * sizeof(int)); //Copy contents of array
 		return *this;
 	}
 
+	//Move assignemnt operator
+	L_Test &operator=(L_Test &&other) {
+		cout << "Move Assignement operator" << endl;
+		delete[] m_pBuffer;
+		m_pBuffer = other.m_pBuffer;
+		other.m_pBuffer = nullptr; //Prevents other from deleteing on destructor.
+		return *this;
+	}
+
 	~L_Test() {
-		cout << "L_Test: Destructor" << endl;
+		//cout << "L_Test: Destructor" << endl;
 		delete[] m_pBuffer;
 	}
 
 	friend ostream &operator<<(ostream &out, const L_Test &test);
 private:
-	int * m_pBuffer;
+	int * m_pBuffer{nullptr};
 	static const int SIZE = 100;
 };
 
 ostream &operator<<(ostream &out, const L_Test &test) {
-	out << "L_Test: Left-Shift";
+	//out << "L_Test: Left-Shift";
 	return out;
 }
 L_Test getLTest() {
@@ -397,6 +412,8 @@ void C_PP_11::EllisionAndOptimization()
 	RValues are commonly temporary values.
 	Can't take the address of RValues
 	Can take the address of LValues
+
+	Return types of functions are RValues
 */
 void C_PP_11::RValue_LValueReferences()
 {
@@ -419,7 +436,161 @@ void C_PP_11::RValue_LValueReferences()
 		Same with:
 		int *s = &(7 + value1);
 	*/
+}
+
+void C_PP_11::LValueReferences()
+{
+	L_Test test1 = getLTest();
+	L_Test &rTest1 = test1;
+
+	/*
+		This does not work without const.
+		Const extends the lifespan of the RValue returned from the method.
+	*/
+	const L_Test &rTest2 = getLTest();
+
+	L_Test test2(L_Test(1));
+}
+
+void LRCheck(const L_Test &value) {
+	cout << "L Value Reference" << endl;
+}
+
+void LRCheck(L_Test &&value) {
+	cout << "R Value Reference" << endl;
+}
+
+void LRCheck(const int &value) {
+	cout << "L Value Reference" << endl;
+}
+
+void LRCheck(int &&value) {
+	cout << "R Value Reference" << endl;
+}
+
+void C_PP_11::RValueReferences()
+{
+	L_Test test1 = getLTest();
+
+	// R-Value reference
+	L_Test &&rTest = L_Test();
+	L_Test &&rTest2 = getLTest();
+
+	LRCheck(test1); // L value
+	LRCheck(getLTest()); // R value
+	LRCheck(L_Test()); // R value
+
+	int i = 6;
+	LRCheck(++i);
+	LRCheck(i++);
+}
+
+void C_PP_11::MoveConstructor()
+{
+	vector<L_Test> vec;
+	vec.push_back(L_Test()); //Move Constructor
+
+	L_Test test;
+	test = getLTest(); //Move assignment operator
+}
+
+//Only checks at compile time
+void C_PP_11::StaticCast()
+{
+	class Mother {
+	public:
+		void speak() {
+			cout << "Mother!" << endl;
+		}
+	};
+
+	class Brother : public Mother {
+
+	};
+
+	Mother parent;
+	Brother brother;
+
+	Mother *pP = &brother; //Works
+	Brother *pB = static_cast<Brother *>(&parent); // Very unsafe
 
 
+
+	Mother *pPB = &brother;
+	Brother *pBB = static_cast<Brother * >(pPB);
+
+	//Convert from l-value reference to r-value
+	Mother &&m = static_cast<Mother &&>(parent);
+	parent.speak();
+}
+
+//Checks casting at runtime.
+void C_PP_11::DynamicCast()
+{
+	class Mother {
+	public:
+		virtual void speak() {
+			cout << "Mother!" << endl;
+		}
+	};
+
+	class Brother : public Mother {
+
+	};
+
+
+	Mother parent;
+	Brother brother;
+
+	// Recasting to a parent class is unsafe and invalid.
+	// Dynamic cast tells us this at runtime.
+	Mother *ppb = &parent;
+	Brother *pbb = dynamic_cast<Brother *>(ppb); //Downcast
+	if (pbb == nullptr) {
+		cout << "Invalid Cast" << endl;
+	}
+	else{
+		cout << ppb << endl;
+	}
+
+
+	Mother *ppb2 = &brother;
+	Brother *pbb2 = dynamic_cast<Brother *>(ppb2);
+	if (pbb2 == nullptr) {
+		cout << "Invalid Cast" << endl;
+	}
+	else {
+		cout << ppb << endl;
+	}
+}
+
+void C_PP_11::ReinterpretCast()
+{
+	class Mother {
+	public:
+		virtual void speak() {
+			cout << "Mother!" << endl;
+		}
+	};
+
+	class Brother : public Mother {
+
+	};
+
+	class Sister : public Mother {
+
+	};
+	Mother parent;
+	Brother brother;
+	Sister sister;
+
+	Mother *ppb = &brother;
+	Sister *pbb = reinterpret_cast<Sister *>(ppb); //Less checking than static_cast, Super unsafe
+	if (pbb == nullptr) {
+		cout << "Invalid Cast" << endl;
+	}
+	else {
+		cout << ppb << endl;
+	}
 }
 

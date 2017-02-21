@@ -22,5 +22,11 @@ public:
 	void DelegatingConstructors();
 	void EllisionAndOptimization();
 	void RValue_LValueReferences();
+	void LValueReferences();
+	void RValueReferences();
+	void MoveConstructor();
+	void StaticCast();
+	void DynamicCast();
+	void ReinterpretCast();
 };
 

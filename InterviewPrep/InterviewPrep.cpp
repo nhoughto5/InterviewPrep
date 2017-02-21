@@ -5,7 +5,7 @@
 int main()
 {
 	C_PP_11 c;
-	c.RValue_LValueReferences();
+	c.ReinterpretCast();
     return 0;
 }
 
