@@ -73,7 +73,7 @@ void C_PP_11::Initialization()
 	int* pInts = new int[3]{ 1,2,3 };
 	cout << pInts[2] << endl;
 
-	int value0{  };
+	int value0{};
 	cout << value0 << endl;
 
 	int *pSomething{ &value };
@@ -93,5 +93,150 @@ void C_PP_11::Initialization()
 
 	vector<string> strings{ "one", "two", "Bowl" };
 	cout << strings[2] << endl;
+}
+
+class Test {
+public:
+	//Default constructor
+	Test() = default;
+
+	//Default Copy Constructor
+	Test(const Test& other) = default;
+
+	//Removes the copy constructor. Use if you don't want it copyable.
+	//Test(const Test& other) = delete;
+
+	Test(int id) : id(id) {
+
+	}
+
+	//Default move/copy operator
+	Test &operator=(const Test &other) = default;
+
+	Test(initializer_list<string> texts) {
+		for (auto value : texts) {
+			cout << value << endl;
+		}
+	}
+
+	void print(initializer_list<string> texts) {
+		for (auto value : texts) {
+			cout << value << endl;
+		}
+	}
+
+	void print2() {
+		cout << id << ": " << name << endl;
+	}
+private:
+	//Default values
+	int id{ 3 };
+	string name{ "Mike" };
+};
+
+void C_PP_11::InitializerList()
+{
+	Test test{ "apple", "orange", "banana" };
+
+	test.print({ "one", "two" });
+}
+
+void C_PP_11::ObjectInitialization()
+{
+	Test test;
+	test.print2();
+
+	Test test2(77);
+	test2.print2();
+}
+
+void lambdaTest(void(*pFunc)()) {
+	pFunc();
+}
+
+void C_PP_11::LambdaExpressions1()
+{
+	auto func = []() {cout << "Hello" << endl; };
+	lambdaTest(func);
+	lambdaTest([]() {cout << "Hello again" << endl; });
+}
+
+void lambda2Test(void(*greet)(string)) {
+	greet("Bob");
+}
+
+void runDivide(double(*div)(double a, double b)) {
+	auto r = div(9, 3);
+	cout << r << endl;
+}
+void C_PP_11::LambdaExpressions2()
+{
+	auto pGreet = [](string name) { cout << "Hello: " << name << endl; };
+	lambda2Test(pGreet);
+
+	// Trailing return type syntax.
+	auto pDivide = [](double a, double b) -> double {
+		if (b == 0) {
+			return 0;
+		}
+		return a / b;
+	};
+
+	cout << pDivide(10.0, 5.0) << endl;
+	cout << pDivide(10.0, 0.0) << endl;
+
+	runDivide(pDivide);
+}
+
+void C_PP_11::LambdaCaptureExpressions()
+{
+	int one = 1;
+	int two = 2;
+	int three = 3;
+
+	//Capture one and two by value
+	[one, two]() {cout << one << ", " << two << endl; }();
+
+	//Capture all local variables by value
+	[=]() {cout << one << ", " << two << endl; }();
+
+	// Capture all local variables by value but capture three by reference
+	// Can change reference values.
+	[=, &three]() {cout << one << ", " << two << ", " << three << endl; three = 7; }();
+	cout << three << endl;
+
+	// Capture all local variables by reference
+	[&]() {cout << one << ", " << two << ", " << three << endl; one = 7; }();
+	cout << one << ", " << two << ", " << three << endl;
+
+	// Capture all local variables by reference but two and three by value
+	[&, two, three]() {cout << one << ", " << two << ", " << three << endl; one = 18; }();
+	cout << one << ", " << two << ", " << three << endl;
+}
+
+class LambdaCaptureThisTest {
+public:
+	void run() {
+		int three{ 3 }, four{ 4 };
+
+		auto pLambda = [this, three, four]() {
+			cout << one << endl;
+			one = 111; //This members captured by reference
+			cout << two << endl;
+			cout << three << endl;
+			cout << four << endl;
+		};
+		pLambda();
+		cout << one << endl;
+	}
+
+private:
+	int one{ 1 }, two{ 2 };
+};
+
+void C_PP_11::LambdaCaptureThis()
+{
+	LambdaCaptureThisTest test;
+	test.run();
 }
 

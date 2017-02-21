@@ -11,5 +11,11 @@ public:
 	void Auto();
 	void nestedTemplateClasses();
 	void Initialization();
+	void InitializerList();
+	void ObjectInitialization();
+	void LambdaExpressions1();
+	void LambdaExpressions2();
+	void LambdaCaptureExpressions();
+	void LambdaCaptureThis();
 };
 
