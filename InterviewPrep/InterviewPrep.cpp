@@ -5,7 +5,7 @@
 int main()
 {
 	C_PP_11 c;
-	c.ReinterpretCast();
+	c.SharedPointers();
     return 0;
 }
 

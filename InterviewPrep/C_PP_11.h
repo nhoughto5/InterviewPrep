@@ -28,5 +28,9 @@ public:
 	void StaticCast();
 	void DynamicCast();
 	void ReinterpretCast();
+	void PerfectForwarding();
+	void Bind();
+	void UniquePointers();
+	void SharedPointers();
 };
 

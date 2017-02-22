@@ -17,19 +17,21 @@
 #include <string>
 #include <stack>
 #include <queue>
+#include <algorithm>
+#include <typeinfo>
+#include <initializer_list>
+#include <functional>
+#include <algorithm>
+#include <memory>
+
+
 #include "Complex.h"
 #include "TestTemplate.h"
-#include <algorithm>
 #include "Parent.h"
 #include "Child.h"
 #include "Animal.h"
 #include "Dog.h"
 #include "Labrador.h"
 #include "C_PP_11.h"
-#include <typeinfo>
 #include "ring.h"
-#include <initializer_list>
-#include <functional>
-#include <algorithm>
-
 // TODO: reference additional headers your program requires here

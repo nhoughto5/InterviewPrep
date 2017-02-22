@@ -594,3 +594,133 @@ void C_PP_11::ReinterpretCast()
 	}
 }
 
+
+
+class PF_Test {
+
+};
+
+template<typename T>
+void call(T &&arg) {
+	//PFCheck(static_cast<T>(arg));
+	PFCheck(forward<T>(arg));
+}
+
+void PFCheck(PF_Test &test) {
+	cout << "L Value" << endl;
+}
+void PFCheck(PF_Test &&test) {
+	cout << "R Value" << endl;
+}
+
+// Pass the correct L/R value arguement to PFCheck via call.
+// Uses reference collapsing.
+void C_PP_11::PerfectForwarding()
+{
+	PF_Test test;
+	auto &&t = test;
+
+	call(PF_Test());
+	call(test);
+}
+
+
+
+int bindAdd(int a, int b, int c) {
+	cout << a << ", " << b << ", " << c << endl;
+	return a + b + c;
+}
+
+int run(function<int(int,int)> func) {
+	return func(7, 3);
+}
+// Allows you to create aliases to functions sort of like function pointers
+// Include <functional>
+// using namespace placeholders;
+void C_PP_11::Bind()
+{
+	cout << bindAdd(1,2,3) << endl;
+	auto calculate = bind(bindAdd, placeholders::_1, placeholders::_2, placeholders::_3);
+	cout << calculate(10, 20, 30) << endl;
+
+	auto calculate1 = bind(bindAdd, placeholders::_2, placeholders::_3, placeholders::_1);
+	cout << calculate1(10, 20, 30) << endl;
+
+	auto calculate2 = bind(bindAdd, placeholders::_2, 100, placeholders::_1);
+	//cout << calculate2(10, 20) << endl;
+
+	//run(calculate2);
+}
+
+
+/*
+	1.) Need to use #include <memory>
+	2.) Will cleanup any memory for us i.e. minimize memory leaks
+*/
+void C_PP_11::UniquePointers()
+{
+	class P_Test {
+	public:
+		P_Test() {
+			cout << "Constructor" << endl;
+		}
+		~P_Test() {
+			cout << "Destructor" << endl;
+		}
+		void greet() {
+			cout << "Hello" << endl;
+		}
+	private:
+	};
+
+	class Temp {
+	public:
+		Temp() : lpTest(new Test[2]){
+
+		}
+	private:
+		unique_ptr<Test[]> lpTest;
+	};
+
+	unique_ptr<P_Test> pTest(new P_Test);
+	pTest->greet();
+	cout << "Here" << endl;
+
+
+	{
+		unique_ptr<P_Test[]> pTest2(new P_Test[2]);
+		pTest2[1].greet();
+	}
+
+	cout << "End" << endl;
+	//At the end of scope the destructor is called on Test pointer
+}
+
+// Similar to unique pointer but doesn't delete memory until all pointers
+// Pointing to that object have died.
+void C_PP_11::SharedPointers()
+{
+	class P_Test {
+	public:
+		P_Test() {
+			cout << "Constructor" << endl;
+		}
+		~P_Test() {
+			cout << "Destructor" << endl;
+		}
+		void greet() {
+			cout << "Hello" << endl;
+		}
+	private:
+	};
+	shared_ptr<P_Test> pTest2(nullptr);
+	{
+		shared_ptr<P_Test> pTest1 = make_shared<P_Test>(); //More Efficient
+
+		// Without this line pTest1 is destroyed at the end of this internal scope.
+		// With it it has to wait until the end of the method.
+		pTest2 = pTest1;
+	}
+	cout << "Finished" << endl;
+}
+
