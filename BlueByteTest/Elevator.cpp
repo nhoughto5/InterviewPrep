@@ -29,6 +29,7 @@ Elevator::Elevator(
 
 void Elevator::SelectFloor(const unsigned int aFloorId) {
 	// Implement me!
+	
 }
 
 unsigned int Elevator::CurrentFloor() const {
@@ -42,12 +43,29 @@ Direction Elevator::CurrentDirection() const {
 bool Elevator::HasWork() const
 {
 	// Implement me!
+
+	// TODO Check that this logic is correct
+	if (myCurrentFloor != targetFloor) {
+		return true;
+	}
 	return false;
 }
 
 void Elevator::Step()
 {
 	// Implement me!
+
+	// TODO Optimize these if statements
+	if (myCurrentDirection == Direction::Up && myCurrentFloor < myFloorCount) {
+		if (myCurrentFloor < targetFloor) {
+			++myCurrentFloor;
+		}
+	}
+	if (myCurrentDirection == Direction::Down && myCurrentFloor > 1) {
+		if (myCurrentFloor > targetFloor) {
+			--myCurrentFloor;
+		}
+	}
 }
 
 unsigned int Elevator::Id() const
@@ -63,4 +81,14 @@ std::string Elevator::ToString() const
 		+ std::to_string(myFloorCount)
 		+ " "
 		+ ::ToString(myCurrentDirection);
+}
+
+unsigned int Elevator::getTargetFloor()
+{
+	return targetFloor;
+}
+
+void Elevator::setTargetFloor(unsigned int t)
+{
+	targetFloor = t;
 }

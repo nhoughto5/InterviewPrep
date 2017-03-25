@@ -8,6 +8,7 @@
 
 class Threads {
 public:
+	//Follows singleton pattern
 	static Threads&	GetInstance() {
 		static Threads instance;
 		return instance;

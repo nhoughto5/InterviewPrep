@@ -75,14 +75,19 @@ void Humans::OnMessageElevatorReady(const MessageElevatorReady&	aMessage) {
 	SEND_TO_HUMANS(message);
 }
 
+//Look at each human, any on the floor the elevator arrived to, switch state to
 void Humans::OnMessageElevatorArrived(const MessageElevatorArrived&	aMessage) {
 	Log("[Humans] Elevator arrived at floor:", aMessage.myFloor);
 
 	// Implement me!
+	for (Human& human : myHumans) {
+		if (human.GetState() == HumanState_Idle && human.myFloor == aMessage.myFloor) {
+			human.SetStateTraveling();
+		}
+	}
 }
 
-void
-Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
+void Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
 	Log("[Humans] Step");
 
 	for (Human& human : myHumans)
@@ -93,6 +98,20 @@ Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
 	PrivPrintTimers();
 
 	// Implement me!
+	
+	
+	for (Human& human : myHumans) {
+		if(human.GetState() == HumanState_Idle){
+			// Call an Elevator
+			MessageElevatorCall call;
+			call.myDirection = Direction::Up;
+			call.myFloor = human.myFloor;
+			MessageBus::GetInstance().SendToElevators(call);
+		}
+	}
+	
+	
+
 
 	MessageHumanStep message;
 	SEND_TO_HUMANS(message);

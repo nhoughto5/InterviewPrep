@@ -28,6 +28,7 @@ private:
 template<typename T> void MessageBus::SendToElevators(const T& aMessage){
 	auto& callbacks = PrivGetElevatorsCallbacks<T>();
 	for (auto& callback : callbacks){
+		// [=] capture all local vairbales by value
 		Threads::GetInstance().AddElevatorWork([=]() { callback(aMessage); });
 	}
 }
@@ -35,6 +36,7 @@ template<typename T> void MessageBus::SendToElevators(const T& aMessage){
 template<typename T> void MessageBus::SendToHumans(const T&	aMessage){
 	auto& callbacks = PrivGetHumansCallbacks<T>();
 	for (auto& callback : callbacks)	{
+		// [=] capture all local vairbales by value
 		Threads::GetInstance().AddHumanWork([=]() { callback(aMessage); });
 	}
 }

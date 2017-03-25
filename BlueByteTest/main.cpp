@@ -23,6 +23,7 @@ int main() {
 	Threads::GetInstance().AddElevatorWork(std::bind(&RunElevators));
 	Threads::GetInstance().AddHumanWork(std::bind(&RunHumans));
 
+	//Joins threads
 	Threads::GetInstance().Wait();
 
 	return 0;

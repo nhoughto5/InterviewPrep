@@ -35,6 +35,10 @@
     <ClInclude Include="Threads.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="NOTES.txt" />
+    <Text Include="README.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B5AA969B-68CA-4BC1-AFBC-787F6CB19EC0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

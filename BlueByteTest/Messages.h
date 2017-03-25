@@ -3,7 +3,7 @@
 #include <string>
 #include "Elevator.h"
 
-enum Direction{
+enum Direction {
 	Up = 0,
 	Down
 };
@@ -16,6 +16,7 @@ class MessageElevatorStep
 {
 };
 
+//Human sitting in the lobby presses button to call elevator
 class MessageElevatorCall
 {
 public:
@@ -23,6 +24,7 @@ public:
 	Direction				myDirection;
 };
 
+//Human in elevator presses desired flood button
 class MessageElevatorRequest
 {
 public:
@@ -42,7 +44,7 @@ class MessageHumanStep
 };
 
 static std::string ToString(const Direction aDirection) {
-	switch (aDirection){
+	switch (aDirection) {
 	case Direction::Up:
 		return "Up";
 	case Direction::Down:

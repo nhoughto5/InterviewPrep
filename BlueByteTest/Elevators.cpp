@@ -25,14 +25,34 @@ void Elevators::Start()
 	}
 }
 
+//Human sitting in the lobby presses button to call elevator
 void Elevators::OnMessageElevatorCall(const MessageElevatorCall& aMessage)
 {
 	// Implement me!
+	unsigned int floorPersonIsOn = aMessage.myFloor;
+	Direction directionPersonWantsToGo = aMessage.myDirection;
+
+	Elevator *tempElevator;
+	int distance = std::numeric_limits<int>::max();
+
+	//Choose Elevator to service call
+	for (Elevator& elevator : myElevators) {
+		// TODO Fix unsigned int subtraction
+		if (abs((int)elevator.CurrentFloor() - (int)floorPersonIsOn) < distance) {
+			if (directionPersonWantsToGo == elevator.CurrentDirection()) {
+				tempElevator = &elevator;
+			}
+		}
+	}
+	tempElevator->setTargetFloor(floorPersonIsOn);
 }
 
+//Human in elevator presses desired flood button
 void Elevators::OnMessageElevatorRequest(const MessageElevatorRequest& aMessage)
 {
 	// Implement me!
+	int x = 4;
+	++x;
 }
 
 void Elevators::OnMessageElevatorStep(const MessageElevatorStep& aMessage)

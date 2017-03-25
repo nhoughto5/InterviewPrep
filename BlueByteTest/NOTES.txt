@@ -1,0 +1,19 @@
+=== Implement Mes ===
+=====================
+
+Humans::OnMessageElevatorArrived
+Humans::OnMessageHumanStep
+
+Elevators::OnMessageElevatorCall
+Elevators::OnMessageElevatorRequest
+
+Elevator::SelectFloor
+Elevator::HasWork
+Elevator::Step
+
+
+
+== Threads ==
+=============
+
+unique_lock: Immediatly locks the mutex but will be unlocked if an exception is thrown

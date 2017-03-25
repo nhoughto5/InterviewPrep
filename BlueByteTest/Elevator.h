@@ -23,9 +23,12 @@ public:
 	unsigned int Id() const;
 	std::string ToString() const;
 
+	unsigned int getTargetFloor();
+	void setTargetFloor(unsigned int t);
 private:
 	unsigned int myId;
 	unsigned int myFloorCount;
 	unsigned int myCurrentFloor;
+	unsigned int targetFloor;
 	Direction myCurrentDirection;
 };

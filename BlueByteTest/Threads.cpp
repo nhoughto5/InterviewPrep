@@ -5,13 +5,14 @@
 // Shrink this number to make the system go faster.
 static const unsigned int locThreadWaitTimeMs = 1000;
 
-void
-Threads::ElevatorWorker() {
+void Threads::ElevatorWorker() {
+	
 	std::vector<std::function<void()>> work;
-
 	while (true) {
 		{
 			std::unique_lock<std::mutex> lock(myElevatorsMutex);
+
+			// The current thread will unlock lock, releasing the mutex, then go to sleep. 
 			myElevatorsCv.wait_for(lock, std::chrono::milliseconds(locThreadWaitTimeMs));
 
 			work.swap(myElevatorsWork);
@@ -31,6 +32,8 @@ void Threads::HumansWorker(){
 	while (true){
 		{
 			std::unique_lock<std::mutex> lock(myHumansMutex);
+
+			// The current thread will unlock lock, releasing the mutex, then go to sleep. 
 			myHumansCv.wait_for(lock, std::chrono::milliseconds(locThreadWaitTimeMs));
 
 			work.swap(myHumansWork);
