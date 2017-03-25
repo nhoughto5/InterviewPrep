@@ -142,10 +142,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animal.h" />
+    <ClInclude Include="BlueByte.h" />
     <ClInclude Include="Child.h" />
     <ClInclude Include="Complex.h" />
     <ClInclude Include="C_PP_11.h" />
     <ClInclude Include="Dog.h" />
+    <ClInclude Include="Hichem.h" />
     <ClInclude Include="Labrador.h" />
     <ClInclude Include="Parent.h" />
     <ClInclude Include="Person.h" />
@@ -158,10 +160,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animal.cpp" />
+    <ClCompile Include="BlueByte.cpp" />
     <ClCompile Include="Child.cpp" />
     <ClCompile Include="Complex.cpp" />
     <ClCompile Include="C_PP_11.cpp" />
     <ClCompile Include="Dog.cpp" />
+    <ClCompile Include="Hichem.cpp" />
     <ClCompile Include="InterviewPrep.cpp" />
     <ClCompile Include="Labrador.cpp" />
     <ClCompile Include="Parent.cpp" />

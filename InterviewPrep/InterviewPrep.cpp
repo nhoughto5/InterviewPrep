@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "Toptal.h"
 #include "Udemy.h"
-
+#include "BlueByte.h"
 int main()
 {
-	C_PP_11 c;
-	c.SharedPointers();
+
+	BlueByte bb;
+
     return 0;
 }
 

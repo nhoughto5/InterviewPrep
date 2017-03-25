@@ -228,6 +228,8 @@ void Udemy::ObjectSplitting()
 void Udemy::AbstractClassesAndPureVirtualFunctions()
 {
 	Labrador lab;
+	Dog dog;
+	dog.speak();
 	lab.run();
 	lab.speak();
 

@@ -9,7 +9,11 @@
 
 #include <stdio.h>
 #include <tchar.h>
+#include <math.h>
+#include "Vector3d.h"
+#include "VectorMath.h"
 #include "LERP.h"
+#include "EulerAngles.h"
 
 
 

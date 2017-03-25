@@ -60,6 +60,12 @@
     <ClInclude Include="ring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Hichem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlueByte.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -96,6 +102,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C_PP_11.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Hichem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlueByte.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
