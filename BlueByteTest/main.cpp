@@ -1,3 +1,4 @@
+#define CATCH_CONFIG_MAIN
 #include <condition_variable>
 #include <mutex>
 #include "Elevators.h"
@@ -16,15 +17,15 @@ void RunHumans() {
 	humans.Start();
 }
 
-int main() {
-	Threads::GetInstance().Start();
-	MessageBus::GetInstance();
-
-	Threads::GetInstance().AddElevatorWork(std::bind(&RunElevators));
-	Threads::GetInstance().AddHumanWork(std::bind(&RunHumans));
-
-	//Joins threads
-	Threads::GetInstance().Wait();
-
-	return 0;
-}
+//int main() {
+//	Threads::GetInstance().Start();
+//	MessageBus::GetInstance();
+//
+//	Threads::GetInstance().AddElevatorWork(std::bind(&RunElevators));
+//	Threads::GetInstance().AddHumanWork(std::bind(&RunHumans));
+//
+//	//Joins threads
+//	Threads::GetInstance().Wait();
+//
+//	return 0;
+//}

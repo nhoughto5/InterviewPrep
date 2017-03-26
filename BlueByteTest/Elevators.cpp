@@ -1,7 +1,6 @@
 #include "MessageBus.h"
 
-#include "Elevators.h"
-
+#include "Elevators.h" 
 Elevators::Elevators()
 {
 }
@@ -77,13 +76,13 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 	for (Elevator& elevator : myElevators) {
 
 		//Only look at idle elevators
-		if (elevator.HasWork()) {
+		if (!elevator.HasWork()) {
 			// Negative / Positive detemines direction
 			tempDistance = (int)elevator.CurrentFloor() - (int)floorPersonIsOn;
 			elevAbove = tempDistance > 0 ? true : false;
 			personWantsToGoUp = directionPersonWantsToGo == Direction::Up ? true : false;
 			elevatorGoingUp = elevator.CurrentDirection() == Direction::Up ? true : false;
-			onExtremity = ((floorPersonIsOn == 1) || (floorPersonIsOn == elevator.getMyFloorCount())) ? true : false;
+			onExtremity = ((floorPersonIsOn == BOTTOM_FLOOR) || (floorPersonIsOn == elevator.getMyFloorCount())) ? true : false;
 
 			/*
 			( Person wants to go up'. Elevator Going Up'. Elevator Above ) +
@@ -110,8 +109,8 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 		return false;
 	}
 	else {
-		return true;
 		tempElevator->setTargetFloor(floorPersonIsOn);
+		return true;
 	}
 	
 }
@@ -125,4 +124,27 @@ void Elevators::ServiceElevatorCalls() {
 			++it;
 		}
 	}
+}
+
+void Elevators::setElevators(std::vector<Elevator> el) {
+	this->myElevators = el;
+}
+
+// TODO Add More test cases
+TEST_CASE("Can Service") {
+	Elevators elev;
+	std::vector<Elevator>	myElevators;
+	myElevators.push_back(Elevator{ 1, 10, 6, Direction::Down });
+	elev.setElevators(myElevators);
+	MessageElevatorCall mTrue1, mFalse1, mFalse2;
+	mTrue1.myDirection = Direction::Up;
+	mTrue1.myFloor = 1;
+	mFalse1.myDirection = Direction::Down;
+	mFalse1.myFloor = 7;
+	mFalse2.myDirection = Direction::Up;
+	mFalse2.myFloor = 7;
+
+	REQUIRE(elev.canService(mTrue1) == true);
+	REQUIRE(elev.canService(mFalse1) == false);
+	REQUIRE(elev.canService(mFalse2) == false);
 }

@@ -10,6 +10,7 @@ Elevator::Elevator(
 	, myFloorCount(aFloorCount)
 	, myCurrentFloor(1)
 	, myCurrentDirection(Direction::Up)
+	, targetFloor(1)
 {
 	Log("[Elevator]", myId, "Created", ToString());
 }
@@ -23,6 +24,7 @@ Elevator::Elevator(
 	, myFloorCount(aFloorCount)
 	, myCurrentFloor(aCurrentFloor)
 	, myCurrentDirection(aDirection)
+	, targetFloor(aCurrentFloor)
 {
 	Log("[Elevator]", myId, "Created", ToString());
 }
