@@ -31,13 +31,15 @@ Elevator::Elevator(
 
 void Elevator::SelectFloor(const unsigned int aFloorId) {
 	// TODO Implement me! - Done
-	if (aFloorId <= myFloorCount) {
+	if (aFloorId <= myFloorCount && aFloorId >= BOTTOM_FLOOR) {
 		targetFloor = aFloorId;
+		myCurrentDirection = aFloorId > myCurrentFloor? Direction::Up : Direction::Down;
 	}
 	else {
 		std::cerr << "ERROR: ElevatorId " << myId << 
 			" was requested on floor " << aFloorId << 
 			". Max reachable floor: " << myFloorCount << "\n";
+		Log("[Elevator] Floor ", aFloorId, " is not a valid flood for elevator number ", myId);
 	}
 }
 
@@ -77,6 +79,7 @@ void Elevator::Step()
 					m.myElevatorId = myId;
 					m.myFloor = targetFloor;
 					SEND_TO_HUMANS(m);
+					Log("[Elevator] Arrived at target floor ", targetFloor);
 				}
 			}
 		}
@@ -88,6 +91,7 @@ void Elevator::Step()
 					m.myElevatorId = myId;
 					m.myFloor = targetFloor;
 					SEND_TO_HUMANS(m);
+					Log("[Elevator] Arrived at target floor ", targetFloor);
 				}
 			}
 		}
@@ -119,6 +123,7 @@ unsigned int Elevator::getTargetFloor()
 void Elevator::setTargetFloor(unsigned int t)
 {
 	targetFloor = t;
+	myCurrentDirection = ((int)targetFloor - (int)myCurrentFloor > 0) ? Direction::Up : Direction::Down;
 }
 
 unsigned int Elevator::getMyFloorCount()
