@@ -24,7 +24,7 @@ public:
 	Direction				myDirection;
 };
 
-//Human in elevator presses desired flood button
+//Human in elevator presses desired floor button
 class MessageElevatorRequest
 {
 public:

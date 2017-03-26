@@ -25,6 +25,8 @@ public:
 
 	unsigned int getTargetFloor();
 	void setTargetFloor(unsigned int t);
+
+	unsigned int getMyFloorCount();
 private:
 	unsigned int myId;
 	unsigned int myFloorCount;

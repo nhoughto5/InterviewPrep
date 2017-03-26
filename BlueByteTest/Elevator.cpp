@@ -92,3 +92,8 @@ void Elevator::setTargetFloor(unsigned int t)
 {
 	targetFloor = t;
 }
+
+unsigned int Elevator::getMyFloorCount()
+{
+	return myFloorCount;
+}
