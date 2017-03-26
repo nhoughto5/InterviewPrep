@@ -167,11 +167,10 @@ void Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
 			it = myHumans.erase(it);
 			srand(time(0));
 			unsigned int goTo = rand() % 10 + BOTTOM_FLOOR;
-			unsigned int at = 4;
-			//unsigned int at = rand() % 10 + BOTTOM_FLOOR;
+			unsigned int at = rand() % 10 + BOTTOM_FLOOR;
 			while (goTo == at) {
 				goTo = rand() % 10 + BOTTOM_FLOOR;
-				//at = rand() % 10 + BOTTOM_FLOOR;
+				at = rand() % 10 + BOTTOM_FLOOR;
 			}
 			myHumans.push_back(Human(at, goTo));
 			it = myHumans.end();
