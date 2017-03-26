@@ -44,7 +44,7 @@ elevator shafts and configurations and a version where we keep generating
 random humans so it runs infinitely.
 
 Included is the incomplete source code of the system, where parts that needs
-implementation are marked with an // Implement me! comment.
+implementation are marked with an // TODO Implement me! comment.
 
 You may add more messages and modify functions/classes to some extent but 
 the general structure of the system should stand.

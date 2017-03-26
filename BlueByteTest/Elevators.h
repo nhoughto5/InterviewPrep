@@ -3,6 +3,7 @@
 #include <mutex>
 #include <vector>
 #include <limits>
+#include <queue>
 #include "Elevator.h"
 #include "Messages.h"
 
@@ -17,5 +18,9 @@ public:
 	void OnMessageElevatorStep(const MessageElevatorStep& aMessage);
 
 private:
+	void updateTargetFloors();
+	bool canService(const MessageElevatorCall& message);
+
 	std::vector<Elevator>	myElevators;
+	std::vector<MessageElevatorCall> callQueue;
 };

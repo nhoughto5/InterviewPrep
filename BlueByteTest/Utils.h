@@ -22,3 +22,7 @@ template<typename... Args> void Log(Args... aArgs){
 	std::unique_lock<std::mutex> lock(locLogMutex);
 	PrivLog(aArgs...);
 }
+
+const unsigned int GetBottomFloor() {
+	return 1;
+}

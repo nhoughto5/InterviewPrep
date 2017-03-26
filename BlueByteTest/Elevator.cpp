@@ -28,8 +28,15 @@ Elevator::Elevator(
 }
 
 void Elevator::SelectFloor(const unsigned int aFloorId) {
-	// Implement me!
-	
+	// TODO Implement me! - Done
+	if (aFloorId <= myFloorCount) {
+		targetFloor = aFloorId;
+	}
+	else {
+		std::cerr << "ERROR: ElevatorId " << myId << 
+			" was requested on floor " << aFloorId << 
+			". Max reachable floor: " << myFloorCount << "\n";
+	}
 }
 
 unsigned int Elevator::CurrentFloor() const {
@@ -42,28 +49,33 @@ Direction Elevator::CurrentDirection() const {
 
 bool Elevator::HasWork() const
 {
-	// Implement me!
+	// TODO Implement me! - Done
 
 	// TODO Check that this logic is correct
 	if (myCurrentFloor != targetFloor) {
 		return true;
 	}
-	return false;
+	else {
+		return false;
+	}
+
 }
 
 void Elevator::Step()
 {
-	// Implement me!
+	// TODO Implement me! - Done
 
 	// TODO Optimize these if statements
-	if (myCurrentDirection == Direction::Up && myCurrentFloor < myFloorCount) {
-		if (myCurrentFloor < targetFloor) {
-			++myCurrentFloor;
+	if (HasWork()) {
+		if (myCurrentDirection == Direction::Up && myCurrentFloor < myFloorCount) {
+			if (myCurrentFloor < targetFloor) {
+				++myCurrentFloor;
+			}
 		}
-	}
-	if (myCurrentDirection == Direction::Down && myCurrentFloor > 1) {
-		if (myCurrentFloor > targetFloor) {
-			--myCurrentFloor;
+		if (myCurrentDirection == Direction::Down && myCurrentFloor > GetBottomFloor()) {
+			if (myCurrentFloor > targetFloor) {
+				--myCurrentFloor;
+			}
 		}
 	}
 }

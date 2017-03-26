@@ -79,7 +79,7 @@ void Humans::OnMessageElevatorReady(const MessageElevatorReady&	aMessage) {
 void Humans::OnMessageElevatorArrived(const MessageElevatorArrived&	aMessage) {
 	Log("[Humans] Elevator arrived at floor:", aMessage.myFloor);
 
-	// Implement me!
+	// TODO Implement me!
 	for (Human& human : myHumans) {
 		if (human.GetState() == HumanState_Idle && human.myFloor == aMessage.myFloor) {
 			human.SetStateTraveling();
@@ -97,7 +97,7 @@ void Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
 
 	PrivPrintTimers();
 
-	// Implement me!
+	// TODO Implement me!
 	
 	
 	for (Human& human : myHumans) {
