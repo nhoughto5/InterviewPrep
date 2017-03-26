@@ -6,7 +6,7 @@
 #include <string>
 
 extern std::mutex locLogMutex;
-
+const unsigned int BOTTOM_FLOOR = 1;
 int Random(const int aFrom,	const int aTo);
 
 template <typename T> void PrivLog(T aT){
@@ -21,8 +21,4 @@ template<typename T, typename... Args> void PrivLog(T aT, Args... aArgs){
 template<typename... Args> void Log(Args... aArgs){
 	std::unique_lock<std::mutex> lock(locLogMutex);
 	PrivLog(aArgs...);
-}
-
-const unsigned int GetBottomFloor() {
-	return 1;
 }

@@ -18,7 +18,7 @@ public:
 	void OnMessageElevatorStep(const MessageElevatorStep& aMessage);
 
 private:
-	void updateTargetFloors();
+	void ServiceElevatorCalls();
 	bool canService(const MessageElevatorCall& message);
 
 	std::vector<Elevator>	myElevators;

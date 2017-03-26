@@ -36,7 +36,7 @@ void Elevators::OnMessageElevatorCall(const MessageElevatorCall& aMessage)
 void Elevators::OnMessageElevatorRequest(const MessageElevatorRequest& aMessage)
 {
 	// TODO Implement me!
-	auto it = std::find_if(myElevators.begin(), myElevators.end(), [&aMessage](const Elevator& obj) {return obj.Id == aMessage.myElevatorId; });
+	auto it = std::find_if(myElevators.begin(), myElevators.end(), [&aMessage](const Elevator& obj) -> bool {return obj.Id() == aMessage.myElevatorId; });
 
 	// TODO Multiple people?
 	if (it != myElevators.end()) {
@@ -54,7 +54,7 @@ void Elevators::OnMessageElevatorStep(const MessageElevatorStep& aMessage)
 
 	// Look at each OnMessageElevatorCall in the queue and assign 
 	//	the nearest available elevator to service it.
-	updateTargetFloors();
+	ServiceElevatorCalls();
 
 	for (auto& elevator : myElevators)
 	{
@@ -116,10 +116,13 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 	
 }
 
-void Elevators::updateTargetFloors() {
-	for (std::vector<MessageElevatorCall>::const_iterator it = callQueue.begin(); it != callQueue.end(); ++it) {
+void Elevators::ServiceElevatorCalls() {
+	for (std::vector<MessageElevatorCall>::const_iterator it = callQueue.begin(); it != callQueue.end();) {
 		if (canService(*it)) {
 			callQueue.erase(it);
+		}
+		else {
+			++it;
 		}
 	}
 }

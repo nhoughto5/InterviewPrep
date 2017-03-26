@@ -72,7 +72,7 @@ void Elevator::Step()
 				++myCurrentFloor;
 			}
 		}
-		if (myCurrentDirection == Direction::Down && myCurrentFloor > GetBottomFloor()) {
+		if (myCurrentDirection == Direction::Down && myCurrentFloor > BOTTOM_FLOOR) {
 			if (myCurrentFloor > targetFloor) {
 				--myCurrentFloor;
 			}
