@@ -3,7 +3,9 @@
 #include <condition_variable>
 #include <mutex>
 #include <vector>
+#include <map>
 #include "Messages.h"
+#include "catch.hpp"
 
 enum HumanState
 {
@@ -44,6 +46,9 @@ public:
 	void OnMessageElevatorArrived(const MessageElevatorArrived&	aMessage);
 	void OnMessageHumanStep(const MessageHumanStep&	aMessage);
 
+	// TODO Delete/Move when done testing
+	std::vector<Human> getHumans();
+	void setHumans(std::vector<Human> h);
 private:
 	std::vector<Human> myHumans;
 	void PrivPrintTimers();

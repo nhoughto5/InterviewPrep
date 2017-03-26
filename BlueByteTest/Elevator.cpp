@@ -72,13 +72,27 @@ void Elevator::Step()
 		if (myCurrentDirection == Direction::Up && myCurrentFloor < myFloorCount) {
 			if (myCurrentFloor < targetFloor) {
 				++myCurrentFloor;
+				if (myCurrentFloor == targetFloor) {
+					MessageElevatorArrived m;
+					m.myElevatorId = myId;
+					m.myFloor = targetFloor;
+					SEND_TO_HUMANS(m);
+				}
 			}
 		}
 		if (myCurrentDirection == Direction::Down && myCurrentFloor > BOTTOM_FLOOR) {
 			if (myCurrentFloor > targetFloor) {
 				--myCurrentFloor;
+				if (myCurrentFloor == targetFloor) {
+					MessageElevatorArrived m;
+					m.myElevatorId = myId;
+					m.myFloor = targetFloor;
+					SEND_TO_HUMANS(m);
+				}
 			}
 		}
+
+
 	}
 }
 

@@ -18,7 +18,12 @@ public:
 	void OnMessageElevatorRequest(const MessageElevatorRequest& aMessage);
 	void OnMessageElevatorStep(const MessageElevatorStep& aMessage);
 
+	// TODO delete these methods when testing done 
 	void setElevators(std::vector<Elevator> el);
+	std::vector<Elevator> getElevators();
+	//===============//
+
+	// TODO move back to private
 	bool canService(const MessageElevatorCall& message);
 private:
 	void ServiceElevatorCalls();

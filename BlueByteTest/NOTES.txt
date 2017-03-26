@@ -4,12 +4,12 @@
 Humans::OnMessageElevatorArrived
 Humans::OnMessageHumanStep
 
-Elevators::OnMessageElevatorCall
-Elevators::OnMessageElevatorRequest
+Elevators::OnMessageElevatorCall - Done
+Elevators::OnMessageElevatorRequest - Done
 
-Elevator::SelectFloor
-Elevator::HasWork
-Elevator::Step
+Elevator::SelectFloor - Done
+Elevator::HasWork - Done
+Elevator::Step - Done
 
 
 

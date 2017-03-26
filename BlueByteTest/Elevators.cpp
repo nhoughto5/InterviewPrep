@@ -27,14 +27,14 @@ void Elevators::Start()
 //Human sitting in the lobby presses button to call elevator
 void Elevators::OnMessageElevatorCall(const MessageElevatorCall& aMessage)
 {
-	// TODO Implement me!
+	// TODO Implement me! - Done
 	callQueue.push_back(aMessage);
 }
 
 //Human in elevator presses desired flood button
 void Elevators::OnMessageElevatorRequest(const MessageElevatorRequest& aMessage)
 {
-	// TODO Implement me!
+	// TODO Implement me! - Done
 	auto it = std::find_if(myElevators.begin(), myElevators.end(), [&aMessage](const Elevator& obj) -> bool {return obj.Id() == aMessage.myElevatorId; });
 
 	// TODO Multiple people?
@@ -47,6 +47,37 @@ void Elevators::OnMessageElevatorRequest(const MessageElevatorRequest& aMessage)
 	}
 }
 
+TEST_CASE("Elevator Request") {
+	Elevators elev;
+	std::vector<Elevator>	myElevators;
+	myElevators.push_back(Elevator{ 1, 10, 1, Direction::Down });
+	elev.setElevators(myElevators);
+	MessageElevatorRequest mPass, mFailFloorOutOfBounds, mFailIDNotFound, mFailBoth;
+	mPass.myElevatorId = 1;
+	mPass.myFloor = 9;
+
+	mFailFloorOutOfBounds.myElevatorId = 1;
+	mFailFloorOutOfBounds.myFloor = 11;
+
+	mFailIDNotFound.myElevatorId = 2;
+	mFailIDNotFound.myFloor = 7;
+
+	mFailBoth.myElevatorId = 2;
+	mFailBoth.myFloor = 11;
+
+	elev.OnMessageElevatorRequest(mPass);
+	REQUIRE(elev.getElevators()[0].getTargetFloor() == 9);
+
+	elev.OnMessageElevatorRequest(mFailFloorOutOfBounds);
+	REQUIRE(elev.getElevators()[0].getTargetFloor() != 7);
+
+	elev.OnMessageElevatorRequest(mFailIDNotFound);
+	REQUIRE(elev.getElevators()[0].getTargetFloor() != 11);
+
+	elev.OnMessageElevatorRequest(mFailBoth);
+	REQUIRE(elev.getElevators()[0].getTargetFloor() != 11);
+
+}
 void Elevators::OnMessageElevatorStep(const MessageElevatorStep& aMessage)
 {
 	Log("[Elevators] Step");
@@ -63,6 +94,31 @@ void Elevators::OnMessageElevatorStep(const MessageElevatorStep& aMessage)
 	MessageElevatorStep message;
 	SEND_TO_ELEVATORS(message);
 }
+
+TEST_CASE("Elevator Step") {
+	Elevators elev;
+	std::vector<Elevator>	myElevators;
+	myElevators.push_back(Elevator{ 1, 10, 6, Direction::Down });
+	elev.setElevators(myElevators);
+	MessageElevatorCall mTrue1, mFalse1, mFalse2;
+	mTrue1.myDirection = Direction::Up;
+	mTrue1.myFloor = 1;
+	mFalse1.myDirection = Direction::Down;
+	mFalse1.myFloor = 7;
+	mFalse2.myDirection = Direction::Up;
+	mFalse2.myFloor = 7;
+	MessageElevatorStep step;
+	REQUIRE(elev.canService(mTrue1) == true);
+	REQUIRE(elev.getElevators()[0].CurrentFloor() == 6);
+	elev.OnMessageElevatorStep(step); //5
+	REQUIRE(elev.getElevators()[0].CurrentFloor() == 5);
+	elev.OnMessageElevatorStep(step); //4
+	elev.OnMessageElevatorStep(step); //3
+	elev.OnMessageElevatorStep(step); //2
+	elev.OnMessageElevatorStep(step); //1
+	REQUIRE(elev.getElevators()[0].HasWork() == false);
+}
+
 
 bool Elevators::canService(const MessageElevatorCall& aMessage) {
 	unsigned int floorPersonIsOn = aMessage.myFloor;
@@ -128,6 +184,11 @@ void Elevators::ServiceElevatorCalls() {
 
 void Elevators::setElevators(std::vector<Elevator> el) {
 	this->myElevators = el;
+}
+
+std::vector<Elevator> Elevators::getElevators()
+{
+	return myElevators;
 }
 
 // TODO Add More test cases

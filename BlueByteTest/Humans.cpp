@@ -75,16 +75,67 @@ void Humans::OnMessageElevatorReady(const MessageElevatorReady&	aMessage) {
 	SEND_TO_HUMANS(message);
 }
 
-//Look at each human, any on the floor the elevator arrived to, switch state to
+//Look at each human, any on the floor the elevator arrived to, switch state to travelling
 void Humans::OnMessageElevatorArrived(const MessageElevatorArrived&	aMessage) {
 	Log("[Humans] Elevator arrived at floor:", aMessage.myFloor);
-
+	bool elevatorTaken = false;
 	// TODO Implement me!
 	for (Human& human : myHumans) {
-		if (human.GetState() == HumanState_Idle && human.myFloor == aMessage.myFloor) {
+
+		// TODO Allow for more than one person to get on an elevator
+
+		// Person is waiting in the lobby to travel
+		// First person gets the elevator
+		if (human.GetState() == HumanState_Waiting && human.myFloor == aMessage.myFloor && !elevatorTaken) {
 			human.SetStateTraveling();
+			MessageElevatorRequest m;
+			m.myElevatorId = aMessage.myElevatorId;
+			m.myFloor = human.myDestinationFloor;
+			SEND_TO_ELEVATORS(m);
+			elevatorTaken = true;
+		}
+
+		//Person has arrived at destination
+		if (human.GetState() == HumanState_Traveling && human.myDestinationFloor == aMessage.myFloor) {
+			// TODO should this person be removed from the myHumans list?
+			human.SetStateArrived();
 		}
 	}
+}
+
+TEST_CASE("Elevator Arrived") {
+	Humans humans;
+	std::vector<Human> h;
+	h.push_back(Human(1, 4));
+	h[0].SetStateWaiting();
+	h.push_back(Human(2, 3));
+	h[1].SetStateTraveling();
+	h.push_back(Human(1, 2));
+	h[2].SetStateWaiting();
+	humans.setHumans(h);
+
+	MessageElevatorArrived mHumansPickedUp, mHumanDroppedOff;
+	mHumansPickedUp.myElevatorId = 1;
+	mHumansPickedUp.myFloor = 1;
+	humans.OnMessageElevatorArrived(mHumansPickedUp);
+
+	//Test that first person on floor one got on elevator
+	REQUIRE(humans.getHumans()[0].GetState() == HumanState_Traveling);
+	//Test that second person on floor one is still waiting
+	REQUIRE(humans.getHumans()[2].GetState() == HumanState_Waiting);
+
+	mHumanDroppedOff.myElevatorId = 1;
+	mHumanDroppedOff.myFloor = 3;
+	humans.OnMessageElevatorArrived(mHumanDroppedOff);
+
+	//Test that person dropped off was able to get off elevator
+	REQUIRE(humans.getHumans()[1].GetState() == HumanState_Arrived);
+
+	mHumansPickedUp.myElevatorId = 1;
+	mHumansPickedUp.myFloor = 1;
+	humans.OnMessageElevatorArrived(mHumansPickedUp);
+	//Test that second person was able to get on the elevator
+	REQUIRE(humans.getHumans()[2].GetState() == HumanState_Traveling);
 }
 
 void Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
@@ -141,4 +192,11 @@ void Humans::PrivPrintTimers() {
 
 	Log("[Stats] Average wait time (steps): ", (sumWaiting / static_cast<float>(humansArrivedCounter)));
 	Log("[Stats] Average travel time (steps): ", (sumTraveling / static_cast<float>(humansArrivedCounter)));
+}
+
+std::vector<Human> Humans::getHumans() {
+	return myHumans;
+}
+void Humans::setHumans(std::vector<Human> h) {
+	myHumans = h;
 }
