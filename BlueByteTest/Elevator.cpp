@@ -11,6 +11,8 @@ Elevator::Elevator(
 	, myCurrentFloor(1)
 	, myCurrentDirection(Direction::Up)
 	, targetFloor(1)
+	, onCall(false)
+	, onRequest(false)
 {
 	Log("[Elevator]", myId, "Created", ToString());
 }
@@ -25,6 +27,8 @@ Elevator::Elevator(
 	, myCurrentFloor(aCurrentFloor)
 	, myCurrentDirection(aDirection)
 	, targetFloor(aCurrentFloor)
+	, onCall(false)
+	, onRequest(false)
 {
 	Log("[Elevator]", myId, "Created", ToString());
 }
@@ -56,7 +60,7 @@ bool Elevator::HasWork() const
 	// TODO Implement me! - Done
 
 	// TODO Check that this logic is correct
-	if (myCurrentFloor != targetFloor) {
+	if (onCall || onRequest) {
 		return true;
 	}
 	else {
@@ -80,6 +84,15 @@ void Elevator::Step()
 					m.myFloor = targetFloor;
 					SEND_TO_HUMANS(m);
 					Log("[Elevator] Arrived at target floor ", targetFloor);
+					if (onCall && !onRequest) {
+						onRequest = true;
+					}
+					else if (onCall && onRequest) {
+						onCall = onRequest = false;
+					}
+					else {
+
+					}
 				}
 			}
 		}
@@ -92,11 +105,18 @@ void Elevator::Step()
 					m.myFloor = targetFloor;
 					SEND_TO_HUMANS(m);
 					Log("[Elevator] Arrived at target floor ", targetFloor);
+					if (onCall && !onRequest) {
+						onRequest = true;
+					}
+					else if (onCall && onRequest) {
+						onCall = onRequest = false;
+					}
+					else {
+
+					}
 				}
 			}
 		}
-
-
 	}
 }
 
@@ -129,4 +149,10 @@ void Elevator::setTargetFloor(unsigned int t)
 unsigned int Elevator::getMyFloorCount()
 {
 	return myFloorCount;
+}
+void Elevator::setOnCall(bool i) {
+	onCall = i;
+}
+bool Elevator::getOnCall() {
+	return onCall;
 }

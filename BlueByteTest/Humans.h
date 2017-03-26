@@ -50,6 +50,7 @@ public:
 	std::vector<Human> getHumans();
 	void setHumans(std::vector<Human> h);
 private:
+	void addNewHuman(int num);
 	std::vector<Human> myHumans;
 	void PrivPrintTimers();
 };

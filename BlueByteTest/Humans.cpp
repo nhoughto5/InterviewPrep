@@ -67,6 +67,7 @@ void Humans::Start()
 	REGISTER_HUMAN(MessageHumanStep, Humans::OnMessageHumanStep);
 
 	myHumans.push_back(Human(1, 4));
+	myHumans.push_back(Human(6, 2));
 }
 
 void Humans::OnMessageElevatorReady(const MessageElevatorReady&	aMessage) {
@@ -149,9 +150,7 @@ void Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
 
 	PrivPrintTimers();
 
-	// TODO Implement me!
-	
-	
+	// TODO Implement me! - Done	
 	for (auto& it = myHumans.begin(); it != myHumans.end();) {
 		if(it->GetState() == HumanState_Idle){
 			// Call an Elevator
@@ -165,15 +164,12 @@ void Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
 		// Remove humans who have completed their journey
 		if (it->GetState() == HumanState_Arrived) {
 			it = myHumans.erase(it);
-			srand(time(0));
-			unsigned int goTo = rand() % 10 + BOTTOM_FLOOR;
-			unsigned int at = rand() % 10 + BOTTOM_FLOOR;
-			while (goTo == at) {
-				goTo = rand() % 10 + BOTTOM_FLOOR;
-				at = rand() % 10 + BOTTOM_FLOOR;
+			// TODO - Remove add human
+			if (myHumans.empty()) {
+				addNewHuman(1);
+				it = myHumans.end();
 			}
-			myHumans.push_back(Human(at, goTo));
-			it = myHumans.end();
+
 		}
 		else {
 			++it;
@@ -183,7 +179,18 @@ void Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
 	MessageHumanStep message;
 	SEND_TO_HUMANS(message);
 }
-
+void Humans::addNewHuman(int num) {
+	srand(time(0));
+	for (int i = 0; i < num; ++i) {
+		unsigned int goTo = rand() % 10 + BOTTOM_FLOOR;
+		unsigned int at = rand() % 10 + BOTTOM_FLOOR;
+		while (goTo == at) {
+			goTo = rand() % 10 + BOTTOM_FLOOR;
+			at = rand() % 10 + BOTTOM_FLOOR;
+		}
+		myHumans.push_back(Human(at, goTo));
+	}
+}
 void Humans::PrivPrintTimers() {
 	unsigned int sumWaiting = 0;
 	unsigned int sumTraveling = 0;

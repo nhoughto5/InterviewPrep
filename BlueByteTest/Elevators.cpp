@@ -189,6 +189,7 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 			SEND_TO_HUMANS(m)
 		}
 		tempElevator->setTargetFloor(floorPersonIsOn);
+		tempElevator->setOnCall(true);
 		return true;
 	}
 	
@@ -243,6 +244,8 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 void Elevators::ServiceElevatorCalls() {
 	for (std::vector<MessageElevatorCall>::const_iterator it = callQueue.begin(); it != callQueue.end();) {
 		if (canService(*it)) {
+			std::string tem = it->myDirection ? "down" : "up";
+			Log("[Elevator] Elevator received call to floor", it->myFloor ,", passenger wants to go", tem);
 			it = callQueue.erase(it);
 		}
 		else {
