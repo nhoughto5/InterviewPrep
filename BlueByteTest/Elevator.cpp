@@ -74,7 +74,7 @@ void Elevator::Step()
 	// TODO Implement me! - Done
 
 	// TODO Optimize these if statements
-	if (HasWork()) {
+	if (myCurrentFloor != targetFloor) {
 		if (myCurrentDirection == Direction::Up && myCurrentFloor < myFloorCount) {
 			if (myCurrentFloor < targetFloor) {
 				++myCurrentFloor;

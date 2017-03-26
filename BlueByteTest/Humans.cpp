@@ -68,6 +68,8 @@ void Humans::Start()
 
 	myHumans.push_back(Human(1, 4));
 	myHumans.push_back(Human(6, 2));
+	myHumans.push_back(Human(3, 8));
+	myHumans.push_back(Human(9, 5));
 }
 
 void Humans::OnMessageElevatorReady(const MessageElevatorReady&	aMessage) {

@@ -133,39 +133,7 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 	//Choose Elevator to service call
 	for (Elevator& elevator : myElevators) {
 
-		//Only look at idle elevators
-		if (elevator.HasWork()) {
-			// Negative / Positive detemines direction
-			tempDistance = (int)elevator.CurrentFloor() - (int)floorPersonIsOn;
-			elevAbove = tempDistance > 0 ? true : false;
-			personWantsToGoUp = directionPersonWantsToGo == Direction::Up ? true : false;
-			elevatorGoingUp = ((int)elevator.getTargetFloor() - (int)elevator.CurrentFloor() > 0) ? true : false;
-			onExtremity = ((floorPersonIsOn == BOTTOM_FLOOR) || (floorPersonIsOn == elevator.getMyFloorCount())) ? true : false;
-
-			/*
-			( Person wants to go up'. Elevator Going Up'. Elevator Above ) +
-			( Elevator Going Up'. Elevator Above . On Extremity ) +
-			( Elevator Going Up . Elevator Above'. On Extremity ) +
-			( Person wants to go up . Elevator Going Up . Elevator Above')
-			*/
-			if (floorPersonIsOn <= elevator.getMyFloorCount()) {
-				if ((!personWantsToGoUp && !elevatorGoingUp && elevAbove) ||
-					(!elevatorGoingUp && elevAbove && onExtremity) ||
-					(elevatorGoingUp && !elevAbove && onExtremity) ||
-					(personWantsToGoUp && elevatorGoingUp && !elevAbove)) {
-
-					//Find the closest
-					if (abs(tempDistance) < distance) {
-						tempElevator = &elevator;
-						distance = abs(tempDistance);
-						if (distance == 0) {
-							tempElevID = elevator.Id();
-						}
-					}
-				}
-			}
-		}
-		else {
+		if (!elevator.HasWork()) {
 			tempDistance = (int)elevator.CurrentFloor() - (int)floorPersonIsOn;
 			//Find the closest
 			if (abs(tempDistance) < distance) {
@@ -175,6 +143,49 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 					tempElevID = elevator.Id();
 				}
 			}
+
+			////Only look at idle elevators
+			//if (elevator.HasWork()) {
+			//	// Negative / Positive detemines direction
+			//	tempDistance = (int)elevator.CurrentFloor() - (int)floorPersonIsOn;
+			//	elevAbove = tempDistance > 0 ? true : false;
+			//	personWantsToGoUp = directionPersonWantsToGo == Direction::Up ? true : false;
+			//	elevatorGoingUp = ((int)elevator.getTargetFloor() - (int)elevator.CurrentFloor() > 0) ? true : false;
+			//	onExtremity = ((floorPersonIsOn == BOTTOM_FLOOR) || (floorPersonIsOn == elevator.getMyFloorCount())) ? true : false;
+
+			//	/*
+			//	( Person wants to go up'. Elevator Going Up'. Elevator Above ) +
+			//	( Elevator Going Up'. Elevator Above . On Extremity ) +
+			//	( Elevator Going Up . Elevator Above'. On Extremity ) +
+			//	( Person wants to go up . Elevator Going Up . Elevator Above')
+			//	*/
+			//	if (floorPersonIsOn <= elevator.getMyFloorCount()) {
+			//		if ((!personWantsToGoUp && !elevatorGoingUp && elevAbove) ||
+			//			(!elevatorGoingUp && elevAbove && onExtremity) ||
+			//			(elevatorGoingUp && !elevAbove && onExtremity) ||
+			//			(personWantsToGoUp && elevatorGoingUp && !elevAbove)) {
+
+			//			//Find the closest
+			//			if (abs(tempDistance) < distance) {
+			//				tempElevator = &elevator;
+			//				distance = abs(tempDistance);
+			//				if (distance == 0) {
+			//					tempElevID = elevator.Id();
+			//				}
+			//			}
+			//		}
+			//	}
+			//}
+			//else {
+			//	tempDistance = (int)elevator.CurrentFloor() - (int)floorPersonIsOn;
+			//	//Find the closest
+			//	if (abs(tempDistance) < distance) {
+			//		tempElevator = &elevator;
+			//		distance = abs(tempDistance);
+			//		if (distance == 0) {
+			//			tempElevID = elevator.Id();
+			//		}
+			//	}
 		}
 	}
 	if (tempElevator == nullptr) {
@@ -192,7 +203,7 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 		tempElevator->setOnCall(true);
 		return true;
 	}
-	
+
 }
 // TODO Add More test cases
 //TEST_CASE("Can Service") {
@@ -245,7 +256,7 @@ void Elevators::ServiceElevatorCalls() {
 	for (std::vector<MessageElevatorCall>::const_iterator it = callQueue.begin(); it != callQueue.end();) {
 		if (canService(*it)) {
 			std::string tem = it->myDirection ? "down" : "up";
-			Log("[Elevator] Elevator received call to floor", it->myFloor ,", passenger wants to go", tem);
+			Log("[Elevator] Elevator received call to floor", it->myFloor, ", passenger wants to go", tem);
 			it = callQueue.erase(it);
 		}
 		else {
