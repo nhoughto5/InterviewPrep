@@ -104,7 +104,7 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 			MessageElevatorArrived m;
 			m.myElevatorId = tempElevID;
 			m.myFloor = floorPersonIsOn;
-			m.floorCount = tempFloorCount;
+			//m.floorCount = tempFloorCount;
 			SEND_TO_HUMANS(m);
 			tempElevator->setOnRequest(true);
 		}

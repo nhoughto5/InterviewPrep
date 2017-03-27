@@ -88,7 +88,7 @@ void Elevator::Step()
 				MessageElevatorArrived m;
 				m.myElevatorId = myId;
 				m.myFloor = targetFloor;
-				m.floorCount = myFloorCount;
+				//m.floorCount = myFloorCount;
 				SEND_TO_HUMANS(m);
 				Log("[Elevator] Elevator", myId, "Arrived at target floor ", targetFloor);
 				if (onCall && !onRequest) {
@@ -115,7 +115,7 @@ void Elevator::Step()
 				MessageElevatorArrived m;
 				m.myElevatorId = myId;
 				m.myFloor = targetFloor;
-				m.floorCount = myFloorCount;
+				//m.floorCount = myFloorCount;
 				SEND_TO_HUMANS(m);
 				Log("[Elevator] Elevator", myId, "Arrived at target floor ", targetFloor);
 				if (onCall && !onRequest) {

@@ -36,7 +36,7 @@ class MessageElevatorArrived
 {
 public:
 	unsigned int			myElevatorId;
-	unsigned int			floorCount;
+	//unsigned int			floorCount;
 	unsigned int			myFloor;
 };
 
