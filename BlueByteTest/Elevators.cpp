@@ -12,9 +12,9 @@ void Elevators::Start()
 	REGISTER_ELEVATOR(MessageElevatorRequest, Elevators::OnMessageElevatorRequest);
 
 	myElevators.push_back(Elevator{ 1, 10, 6, Direction::Down });
-	//myElevators.push_back(Elevator{ 2, 10, 2, Direction::Up });
-	//myElevators.push_back(Elevator{ 3, 10, 2, Direction::Up });
-	//myElevators.push_back(Elevator{ 4, 10, 2, Direction::Up });
+	myElevators.push_back(Elevator{ 2, 10, 2, Direction::Up });
+	myElevators.push_back(Elevator{ 3, 10, 2, Direction::Up });
+	myElevators.push_back(Elevator{ 4, 10, 2, Direction::Up });
 	{
 		MessageElevatorStep message;
 		SEND_TO_ELEVATORS(message);
@@ -36,9 +36,10 @@ void Elevators::OnMessageElevatorCall(const MessageElevatorCall& aMessage)
 //Human in elevator presses desired floor button
 void Elevators::OnMessageElevatorRequest(const MessageElevatorRequest& aMessage)
 {
-	Log("[Elevator] Request Recieved");
+	Log("[Elevator] Request Received");
 	// TODO Implement me! - Done
-	auto it = std::find_if(myElevators.begin(), myElevators.end(), [&aMessage](const Elevator& obj) -> bool {return obj.Id() == aMessage.myElevatorId; });
+	auto it = std::find_if(myElevators.begin(), myElevators.end(), 
+		[&aMessage](const Elevator& obj) -> bool {return obj.Id() == aMessage.myElevatorId; });
 
 	// TODO Multiple people?
 	if (it != myElevators.end()) {
@@ -49,6 +50,93 @@ void Elevators::OnMessageElevatorRequest(const MessageElevatorRequest& aMessage)
 		std::cerr << "ERROR: Can not find elevator number: " << aMessage.myElevatorId << "\n";
 	}
 }
+
+void Elevators::OnMessageElevatorStep(const MessageElevatorStep& aMessage)
+{
+	Log("[Elevators] Step");
+
+	// Look at each OnMessageElevatorCall in the queue and assign 
+	//	the nearest available elevator to service it.
+	ServiceElevatorCalls();
+
+	for (auto& elevator : myElevators)
+	{
+		elevator.Step();
+	}
+
+	MessageElevatorStep message;
+	SEND_TO_ELEVATORS(message);
+}
+
+bool Elevators::canService(const MessageElevatorCall& aMessage) {
+	unsigned int floorPersonIsOn = aMessage.myFloor;
+	Direction directionPersonWantsToGo = aMessage.myDirection;
+
+	Elevator *tempElevator = nullptr;
+	int distance = std::numeric_limits<int>::max();
+	int tempDistance;
+	unsigned int tempElevID = 0, tempFloorCount = 0;
+
+	//Choose which elevator to service call
+	for (Elevator& elevator : myElevators) {
+
+		if (!elevator.HasWork()) {
+			tempDistance = (int)elevator.CurrentFloor() - (int)floorPersonIsOn;
+			//Find the closest
+			if (abs(tempDistance) < distance) {
+				tempElevator = &elevator;
+				distance = abs(tempDistance);
+				if (distance == 0) {
+					tempElevID = elevator.Id();
+					tempFloorCount = elevator.getMyFloorCount();
+				}
+			}
+		}
+	}
+
+	//If no elevator selected, the call can not yet be serviced
+	if (tempElevator == nullptr) {
+		return false;
+	}
+	else {
+		//This elevator is already at the human's location
+		if (distance == 0) {
+			MessageElevatorArrived m;
+			m.myElevatorId = tempElevID;
+			m.myFloor = floorPersonIsOn;
+			m.floorCount = tempFloorCount;
+			SEND_TO_HUMANS(m);
+			tempElevator->setOnRequest(true);
+		}
+		tempElevator->setTargetFloor(floorPersonIsOn);
+		tempElevator->setOnCall(true);
+		return true;
+	}
+
+}
+
+void Elevators::ServiceElevatorCalls() {
+	for (std::vector<MessageElevatorCall>::const_iterator it = callQueue.begin(); it != callQueue.end();) {
+		if (canService(*it)) {
+			std::string tem = it->myDirection ? "down" : "up";
+			Log("[Elevator] Elevator received call to floor", it->myFloor, ", passenger wants to go", tem);
+			it = callQueue.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+}
+
+void Elevators::setElevators(std::vector<Elevator> el) {
+	this->myElevators = el;
+}
+
+std::vector<Elevator> Elevators::getElevators()
+{
+	return myElevators;
+}
+
 
 //TEST_CASE("Elevator Request") {
 //	Elevators elev;
@@ -81,22 +169,6 @@ void Elevators::OnMessageElevatorRequest(const MessageElevatorRequest& aMessage)
 //	REQUIRE(elev.getElevators()[0].getTargetFloor() != 11);
 //
 //}
-void Elevators::OnMessageElevatorStep(const MessageElevatorStep& aMessage)
-{
-	Log("[Elevators] Step");
-
-	// Look at each OnMessageElevatorCall in the queue and assign 
-	//	the nearest available elevator to service it.
-	ServiceElevatorCalls();
-
-	for (auto& elevator : myElevators)
-	{
-		elevator.Step();
-	}
-
-	MessageElevatorStep message;
-	SEND_TO_ELEVATORS(message);
-}
 
 //TEST_CASE("Elevator Step") {
 //	Elevators elev;
@@ -122,51 +194,6 @@ void Elevators::OnMessageElevatorStep(const MessageElevatorStep& aMessage)
 //	REQUIRE(elev.getElevators()[0].HasWork() == false);
 //}
 
-
-bool Elevators::canService(const MessageElevatorCall& aMessage) {
-	unsigned int floorPersonIsOn = aMessage.myFloor;
-	Direction directionPersonWantsToGo = aMessage.myDirection;
-
-	Elevator *tempElevator = nullptr;
-	int distance = std::numeric_limits<int>::max();
-	int tempDistance;
-	unsigned int tempElevID = 0, tempFloorCount = 0;
-	bool elevAbove, personWantsToGoUp, elevatorGoingUp, onExtremity;
-	//Choose Elevator to service call
-	for (Elevator& elevator : myElevators) {
-
-		if (!elevator.HasWork()) {
-			tempDistance = (int)elevator.CurrentFloor() - (int)floorPersonIsOn;
-			//Find the closest
-			if (abs(tempDistance) < distance) {
-				tempElevator = &elevator;
-				distance = abs(tempDistance);
-				if (distance == 0) {
-					tempElevID = elevator.Id();
-					tempFloorCount = elevator.getMyFloorCount();
-				}
-			}
-		}
-	}
-	if (tempElevator == nullptr) {
-		return false;
-	}
-	else {
-		//This elevator is already at the human's location
-		if (distance == 0) {
-			MessageElevatorArrived m;
-			m.myElevatorId = tempElevID;
-			m.myFloor = floorPersonIsOn;
-			m.floorCount = tempFloorCount;
-			SEND_TO_HUMANS(m);
-			tempElevator->setOnRequest(true);
-		}
-		tempElevator->setTargetFloor(floorPersonIsOn);
-		tempElevator->setOnCall(true);
-		return true;
-	}
-
-}
 // TODO Add More test cases
 //TEST_CASE("Can Service") {
 //	Elevators elev;
@@ -214,25 +241,3 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 //	REQUIRE(elev.canService(mTrue4) == true);
 //	REQUIRE(elev.canService(mFalse1) == false);
 //}
-void Elevators::ServiceElevatorCalls() {
-	for (std::vector<MessageElevatorCall>::const_iterator it = callQueue.begin(); it != callQueue.end();) {
-		if (canService(*it)) {
-			std::string tem = it->myDirection ? "down" : "up";
-			Log("[Elevator] Elevator received call to floor", it->myFloor, ", passenger wants to go", tem);
-			it = callQueue.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-}
-
-void Elevators::setElevators(std::vector<Elevator> el) {
-	this->myElevators = el;
-}
-
-std::vector<Elevator> Elevators::getElevators()
-{
-	return myElevators;
-}
-

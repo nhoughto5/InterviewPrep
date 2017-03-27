@@ -66,10 +66,10 @@ void Humans::Start()
 	REGISTER_HUMAN(MessageElevatorArrived, Humans::OnMessageElevatorArrived);
 	REGISTER_HUMAN(MessageHumanStep, Humans::OnMessageHumanStep);
 
-	//myHumans.push_back(Human(1, 10));
+	myHumans.push_back(Human(1, 10));
 	myHumans.push_back(Human(6, 2));
-	//myHumans.push_back(Human(3, 8));
-	//myHumans.push_back(Human(9, 5));
+	myHumans.push_back(Human(3, 8));
+	myHumans.push_back(Human(9, 5));
 }
 
 void Humans::OnMessageElevatorReady(const MessageElevatorReady&	aMessage) {
@@ -167,10 +167,10 @@ void Humans::OnMessageHumanStep(const MessageHumanStep& aMessage) {
 		if (it->GetState() == HumanState_Arrived) {
 			it = myHumans.erase(it);
 			// TODO - Remove add human
-			if (myHumans.empty()) {
-				addNewHuman(1);
-				it = myHumans.end();
-			}
+			//if (myHumans.empty()) {
+			//	addNewHuman(1);
+			//	it = myHumans.end();
+			//}
 
 		}
 		else {

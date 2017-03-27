@@ -1,6 +1,5 @@
 #include "Elevator.h"
 #include "MessageBus.h"
-
 #include "Elevators.h"
 
 Elevator::Elevator(
@@ -40,9 +39,6 @@ void Elevator::SelectFloor(const unsigned int aFloorId) {
 		myCurrentDirection = aFloorId > myCurrentFloor ? Direction::Up : Direction::Down;
 	}
 	else {
-		std::cerr << "ERROR: ElevatorId " << myId <<
-			" was requested on floor " << aFloorId <<
-			". Max reachable floor: " << myFloorCount << "\n";
 		Log("[Elevator] Floor ", aFloorId, " is not a valid flood for elevator number ", myId);
 	}
 }
@@ -73,14 +69,22 @@ void Elevator::Step()
 {
 	// TODO Implement me! - Done
 
-	// TODO Optimize these if statements
+	// No reason to move an elevator that does not have a job to do
 	if (!HasWork()) {
 		return;
 	}
+
+
+	// TODO Optimize these if statements
+
+	//Move elevator up
 	if (myCurrentDirection == Direction::Up && myCurrentFloor < myFloorCount) {
 		if (myCurrentFloor < targetFloor) {
 			++myCurrentFloor;
 			if (myCurrentFloor == targetFloor) {
+
+				// The elevator has arrived at its detination
+				// Notify humans
 				MessageElevatorArrived m;
 				m.myElevatorId = myId;
 				m.myFloor = targetFloor;
@@ -95,15 +99,19 @@ void Elevator::Step()
 					onCall = onRequest = false;
 				}
 				else {
-
+					//Do nothing
 				}
 			}
 		}
 	}
+	//Move elevator down
 	if (myCurrentDirection == Direction::Down && myCurrentFloor > BOTTOM_FLOOR) {
 		if (myCurrentFloor > targetFloor) {
 			--myCurrentFloor;
 			if (myCurrentFloor == targetFloor) {
+
+				// The elevator has arrived at its detination
+				// Notify humans
 				MessageElevatorArrived m;
 				m.myElevatorId = myId;
 				m.myFloor = targetFloor;
@@ -118,7 +126,7 @@ void Elevator::Step()
 					onCall = onRequest = false;
 				}
 				else {
-
+					//Do nothing
 				}
 			}
 		}
