@@ -26,11 +26,13 @@ public:
 	unsigned int getTargetFloor();
 	void setTargetFloor(unsigned int t);
 
-	unsigned int getMyFloorCount();
+	unsigned int getMyFloorCount() const;
 
 	// TODO - Try to not need this boolean
 	void setOnCall(bool i);
 	bool getOnCall();
+	void setOnRequest(bool i);
+	bool getOnRequest();
 private:
 	unsigned int myId;
 	unsigned int myFloorCount;

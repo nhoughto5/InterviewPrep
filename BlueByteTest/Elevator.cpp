@@ -37,11 +37,11 @@ void Elevator::SelectFloor(const unsigned int aFloorId) {
 	// TODO Implement me! - Done
 	if (aFloorId <= myFloorCount && aFloorId >= BOTTOM_FLOOR) {
 		targetFloor = aFloorId;
-		myCurrentDirection = aFloorId > myCurrentFloor? Direction::Up : Direction::Down;
+		myCurrentDirection = aFloorId > myCurrentFloor ? Direction::Up : Direction::Down;
 	}
 	else {
-		std::cerr << "ERROR: ElevatorId " << myId << 
-			" was requested on floor " << aFloorId << 
+		std::cerr << "ERROR: ElevatorId " << myId <<
+			" was requested on floor " << aFloorId <<
 			". Max reachable floor: " << myFloorCount << "\n";
 		Log("[Elevator] Floor ", aFloorId, " is not a valid flood for elevator number ", myId);
 	}
@@ -74,46 +74,51 @@ void Elevator::Step()
 	// TODO Implement me! - Done
 
 	// TODO Optimize these if statements
-	if (myCurrentFloor != targetFloor) {
-		if (myCurrentDirection == Direction::Up && myCurrentFloor < myFloorCount) {
-			if (myCurrentFloor < targetFloor) {
-				++myCurrentFloor;
-				if (myCurrentFloor == targetFloor) {
-					MessageElevatorArrived m;
-					m.myElevatorId = myId;
-					m.myFloor = targetFloor;
-					SEND_TO_HUMANS(m);
-					Log("[Elevator] Arrived at target floor ", targetFloor);
-					if (onCall && !onRequest) {
-						onRequest = true;
-					}
-					else if (onCall && onRequest) {
-						onCall = onRequest = false;
-					}
-					else {
+	if (!HasWork()) {
+		return;
+	}
+	if (myCurrentDirection == Direction::Up && myCurrentFloor < myFloorCount) {
+		if (myCurrentFloor < targetFloor) {
+			++myCurrentFloor;
+			if (myCurrentFloor == targetFloor) {
+				MessageElevatorArrived m;
+				m.myElevatorId = myId;
+				m.myFloor = targetFloor;
+				m.floorCount = myFloorCount;
+				SEND_TO_HUMANS(m);
+				Log("[Elevator] Elevator", myId, "Arrived at target floor ", targetFloor);
+				if (onCall && !onRequest) {
+					onRequest = true;
+				}
+				else if (onCall && onRequest) {
+					Log("[Elevator] Elevator", myId, "Reset");
+					onCall = onRequest = false;
+				}
+				else {
 
-					}
 				}
 			}
 		}
-		if (myCurrentDirection == Direction::Down && myCurrentFloor > BOTTOM_FLOOR) {
-			if (myCurrentFloor > targetFloor) {
-				--myCurrentFloor;
-				if (myCurrentFloor == targetFloor) {
-					MessageElevatorArrived m;
-					m.myElevatorId = myId;
-					m.myFloor = targetFloor;
-					SEND_TO_HUMANS(m);
-					Log("[Elevator] Arrived at target floor ", targetFloor);
-					if (onCall && !onRequest) {
-						onRequest = true;
-					}
-					else if (onCall && onRequest) {
-						onCall = onRequest = false;
-					}
-					else {
+	}
+	if (myCurrentDirection == Direction::Down && myCurrentFloor > BOTTOM_FLOOR) {
+		if (myCurrentFloor > targetFloor) {
+			--myCurrentFloor;
+			if (myCurrentFloor == targetFloor) {
+				MessageElevatorArrived m;
+				m.myElevatorId = myId;
+				m.myFloor = targetFloor;
+				m.floorCount = myFloorCount;
+				SEND_TO_HUMANS(m);
+				Log("[Elevator] Elevator", myId, "Arrived at target floor ", targetFloor);
+				if (onCall && !onRequest) {
+					onRequest = true;
+				}
+				else if (onCall && onRequest) {
+					Log("[Elevator] Elevator", myId, "Reset");
+					onCall = onRequest = false;
+				}
+				else {
 
-					}
 				}
 			}
 		}
@@ -146,7 +151,7 @@ void Elevator::setTargetFloor(unsigned int t)
 	myCurrentDirection = ((int)targetFloor - (int)myCurrentFloor > 0) ? Direction::Up : Direction::Down;
 }
 
-unsigned int Elevator::getMyFloorCount()
+unsigned int Elevator::getMyFloorCount() const
 {
 	return myFloorCount;
 }
@@ -155,4 +160,14 @@ void Elevator::setOnCall(bool i) {
 }
 bool Elevator::getOnCall() {
 	return onCall;
+}
+
+void Elevator::setOnRequest(bool i)
+{
+	onRequest = i;
+}
+
+bool Elevator::getOnRequest()
+{
+	return onRequest;
 }

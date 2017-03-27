@@ -12,7 +12,9 @@ void Elevators::Start()
 	REGISTER_ELEVATOR(MessageElevatorRequest, Elevators::OnMessageElevatorRequest);
 
 	myElevators.push_back(Elevator{ 1, 10, 6, Direction::Down });
-
+	//myElevators.push_back(Elevator{ 2, 10, 2, Direction::Up });
+	//myElevators.push_back(Elevator{ 3, 10, 2, Direction::Up });
+	//myElevators.push_back(Elevator{ 4, 10, 2, Direction::Up });
 	{
 		MessageElevatorStep message;
 		SEND_TO_ELEVATORS(message);
@@ -31,7 +33,7 @@ void Elevators::OnMessageElevatorCall(const MessageElevatorCall& aMessage)
 	callQueue.push_back(aMessage);
 }
 
-//Human in elevator presses desired flood button
+//Human in elevator presses desired floor button
 void Elevators::OnMessageElevatorRequest(const MessageElevatorRequest& aMessage)
 {
 	Log("[Elevator] Request Recieved");
@@ -128,7 +130,7 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 	Elevator *tempElevator = nullptr;
 	int distance = std::numeric_limits<int>::max();
 	int tempDistance;
-	unsigned int tempElevID = 0;
+	unsigned int tempElevID = 0, tempFloorCount = 0;
 	bool elevAbove, personWantsToGoUp, elevatorGoingUp, onExtremity;
 	//Choose Elevator to service call
 	for (Elevator& elevator : myElevators) {
@@ -141,51 +143,9 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 				distance = abs(tempDistance);
 				if (distance == 0) {
 					tempElevID = elevator.Id();
+					tempFloorCount = elevator.getMyFloorCount();
 				}
 			}
-
-			////Only look at idle elevators
-			//if (elevator.HasWork()) {
-			//	// Negative / Positive detemines direction
-			//	tempDistance = (int)elevator.CurrentFloor() - (int)floorPersonIsOn;
-			//	elevAbove = tempDistance > 0 ? true : false;
-			//	personWantsToGoUp = directionPersonWantsToGo == Direction::Up ? true : false;
-			//	elevatorGoingUp = ((int)elevator.getTargetFloor() - (int)elevator.CurrentFloor() > 0) ? true : false;
-			//	onExtremity = ((floorPersonIsOn == BOTTOM_FLOOR) || (floorPersonIsOn == elevator.getMyFloorCount())) ? true : false;
-
-			//	/*
-			//	( Person wants to go up'. Elevator Going Up'. Elevator Above ) +
-			//	( Elevator Going Up'. Elevator Above . On Extremity ) +
-			//	( Elevator Going Up . Elevator Above'. On Extremity ) +
-			//	( Person wants to go up . Elevator Going Up . Elevator Above')
-			//	*/
-			//	if (floorPersonIsOn <= elevator.getMyFloorCount()) {
-			//		if ((!personWantsToGoUp && !elevatorGoingUp && elevAbove) ||
-			//			(!elevatorGoingUp && elevAbove && onExtremity) ||
-			//			(elevatorGoingUp && !elevAbove && onExtremity) ||
-			//			(personWantsToGoUp && elevatorGoingUp && !elevAbove)) {
-
-			//			//Find the closest
-			//			if (abs(tempDistance) < distance) {
-			//				tempElevator = &elevator;
-			//				distance = abs(tempDistance);
-			//				if (distance == 0) {
-			//					tempElevID = elevator.Id();
-			//				}
-			//			}
-			//		}
-			//	}
-			//}
-			//else {
-			//	tempDistance = (int)elevator.CurrentFloor() - (int)floorPersonIsOn;
-			//	//Find the closest
-			//	if (abs(tempDistance) < distance) {
-			//		tempElevator = &elevator;
-			//		distance = abs(tempDistance);
-			//		if (distance == 0) {
-			//			tempElevID = elevator.Id();
-			//		}
-			//	}
 		}
 	}
 	if (tempElevator == nullptr) {
@@ -197,7 +157,9 @@ bool Elevators::canService(const MessageElevatorCall& aMessage) {
 			MessageElevatorArrived m;
 			m.myElevatorId = tempElevID;
 			m.myFloor = floorPersonIsOn;
-			SEND_TO_HUMANS(m)
+			m.floorCount = tempFloorCount;
+			SEND_TO_HUMANS(m);
+			tempElevator->setOnRequest(true);
 		}
 		tempElevator->setTargetFloor(floorPersonIsOn);
 		tempElevator->setOnCall(true);
