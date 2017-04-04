@@ -28,7 +28,7 @@ float Recipe::getDiscount() {
     for (auto& i : mIngredients) {
         total += i.organic() ? 0.0f : i.getValue() * WELLNESS_DISCOUNT;
     }
-    return total;
+    return roundUpUtil (total, 0.01f);
 }
 
 float Recipe::getSalesTax() {
@@ -38,23 +38,17 @@ float Recipe::getSalesTax() {
     }
 
     //Round to nearest seven cents
-    return roundUtil (total);
+    return roundUpUtil (total, 0.07f);
 }
 
 std::string Recipe::printTotalCost() {
-    std::stringstream stream;
-    stream << std::fixed << std::setprecision(2) << getTotalCost();
-    return stream.str();
+    return Money(getTotalCost()).toString();
 }
 
 std::string Recipe::printWellnessDiscount() {
-    std::stringstream stream;
-    stream << std::fixed << std::setprecision(2) << getDiscount();
-    return stream.str();
+    return Money(getDiscount()).toString();
 }
 
 std::string Recipe::printSalesTax() {
-    std::stringstream stream;
-    stream << std::fixed << std::setprecision(2) << getSalesTax();
-    return stream.str();
+    return Money(getSalesTax()).toString();
 }

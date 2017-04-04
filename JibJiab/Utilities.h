@@ -7,10 +7,9 @@
 enum IngredientType {Produce, Meat, Pantry, Other};
 const float SALES_TAX = 0.086f;
 const float WELLNESS_DISCOUNT = 0.05f;
-const float ROUND_TO = 0.07f;
 
-inline float roundUtil(float money) {
-    return (roundf(money / 0.07f) * 0.07f);
+inline float roundUpUtil(float money, float round) {
+    return (ceil(money / round) * round);
 }
 #endif // !UTILITIES_H
 

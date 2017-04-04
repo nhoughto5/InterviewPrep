@@ -6,62 +6,12 @@
 #include "Utilities.h"
 #include "Ingredient.h"
 #include "Money.h"
-#include "Recipe.h"
+#include "Kitchen.h"
 
-
-std::vector<Ingredient> getIngredientList() {
-    std::vector<Ingredient> ret;
-
-    //Produce
-    ret.push_back(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
-    ret.push_back(Ingredient(Produce, 1, false, "Lemon", "", Money(2.03f)));
-    ret.push_back(Ingredient(Produce, 1, false, "Corn", "cup", Money(0.87f)));
-
-    // Meat/Poultry
-    ret.push_back(Ingredient(Meat, 1, false, "Chicken Breast", "", Money(2.19f)));
-    ret.push_back(Ingredient(Meat, 1, false, "Bacon", "slice", Money(0.24f)));
-
-    // Pantry
-    ret.push_back(Ingredient(Pantry, 1, false, "Pasta", "ounce", Money(0.31f)));
-    ret.push_back(Ingredient(Pantry, 1, true, "Olive Oil", "cup", Money(1.92f)));
-    ret.push_back(Ingredient(Pantry, 1, false, "Vinegar", "cup", Money(1.26f)));
-    ret.push_back(Ingredient(Pantry, 1, false, "Salt", "teaspoon", Money(0.16f)));
-    ret.push_back(Ingredient(Pantry, 1, false, "pepper", "teaspoon", Money(0.17f)));
-
-    return ret;
-}
-std::vector<Recipe> initRecipes() {
-    std::vector<Recipe> ret;
-    Recipe r1;
-    r1.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
-    r1.addIngredient(Ingredient(Produce, 1, false, "Lemon", "", Money(2.03f)));
-    r1.addIngredient(Ingredient(Pantry, 0.75f, true, "Olive Oil", "cup", Money(1.92f)));
-    r1.addIngredient(Ingredient(Pantry, 0.75f, false, "Salt", "teaspoon", Money(0.16f)));
-    r1.addIngredient(Ingredient(Pantry, 0.5f, false, "pepper", "teaspoon", Money(0.17f)));
-    ret.push_back(r1);
-
-    Recipe r2;
-    r2.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
-    r2.addIngredient(Ingredient(Meat, 4, false, "Chicken Breast", "", Money(2.19f)));
-    r2.addIngredient(Ingredient(Pantry, 0.5f, true, "Olive Oil", "cup", Money(1.92f)));
-    r2.addIngredient(Ingredient(Pantry, 0.5f, false, "Vinegar", "cup", Money(1.26f)));
-    ret.push_back(r2);
-
-    Recipe r3;
-    r3.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
-    r3.addIngredient(Ingredient(Produce, 4, false, "Corn", "cup", Money(0.87f)));
-    r3.addIngredient(Ingredient(Meat, 4, false, "Bacon", "slices", Money(0.24f)));
-    r3.addIngredient(Ingredient(Pantry, 8, false, "Pasta", "ounce", Money(0.31f)));
-    r3.addIngredient(Ingredient(Pantry, 0.3333f, true, "Olive Oil", "cup", Money(1.92f)));
-    r3.addIngredient(Ingredient(Pantry, 1.25, false, "Salt", "teaspoon", Money(0.16f)));
-    r3.addIngredient(Ingredient(Pantry, 0.75, false, "pepper", "teaspoon", Money(0.17f)));
-    ret.push_back(r3);
-    return ret;
-}
 void testUtilMethods() {
     float tolerance = 0.00001;
-    assert(abs(roundUtil(0.06f) - 0.07f) < tolerance);
-    assert(abs(roundUtil(0.22f) - 0.21f) < tolerance);
+    assert(abs(roundUpUtil(0.06f, 0.07f) - 0.07f) < tolerance);
+    assert(abs(roundUpUtil(0.22f, 0.07f) - 0.28f) < tolerance);
 
     std::cout << "PASS - All util tests passed\n";
 }
@@ -95,6 +45,30 @@ void testMoneyClass() {
     std::cout << "PASS - All Money class test cases passed\n";
 }
 
+void testRecipeClass() {
+    
+    Kitchen kitchen;
+    kitchen.initKitchen();
+
+    // R1
+    assert(kitchen.m_recipes()[0].printTotalCost().compare ("$4.45") == 0);
+    assert(kitchen.m_recipes()[0].printSalesTax().compare ("$0.21") == 0);
+    assert(kitchen.m_recipes()[0].printWellnessDiscount().compare ("$0.11") == 0);
+
+    // R2
+    assert(kitchen.m_recipes()[1].printTotalCost().compare("$11.84") == 0);
+    assert(kitchen.m_recipes()[1].printSalesTax().compare("$0.91") == 0);
+    assert(kitchen.m_recipes()[1].printWellnessDiscount().compare("$0.09") == 0);
+
+    // R3
+    assert(kitchen.m_recipes()[2].printTotalCost().compare("$8.91") == 0);
+    assert(kitchen.m_recipes()[2].printSalesTax().compare("$0.42") == 0);
+    assert(kitchen.m_recipes()[2].printWellnessDiscount().compare("$0.07") == 0);
+
+
+    std::cout << "PASS - All Recipe class tests passed\n";
+}
+
 void testIngredientClass() {
     Ingredient garlic(Produce, 1, true, "Garlic", "clove", Money(0.67f));
     assert(garlic.toString().compare("1.00 clove of organic Garlic = $0.67") == 0);
@@ -111,6 +85,7 @@ void runTestCases() {
     testMoneyClass();
     testIngredientClass();
     testUtilMethods();
+    testRecipeClass();
 }
 
 void printHelp() {
@@ -123,9 +98,9 @@ void printRecipes() {
     
 }
 void printIngredients() {
-    auto i = getIngredientList();
-    printf("---- List of Ingredients ----");
-    for (Ingredient ingredient : i) {
+    auto ingredients = Kitchen::m_ingredients();
+    printf ("---- List of Ingredients ----");
+    for (Ingredient ingredient : ingredients) {
         std::cout << ingredient.toString() << "\n";
     }
 }
@@ -169,7 +144,7 @@ int main(int argc, char* argv[]) {
         printf("\n ============= Welcome to Recipe Calculator ============= \n");
         while(1){
             if(!madeMistake) {
-                printf("Would you like to choose from a pre-made recipe (R), make your own from a list of ingredients (I) or Exit (Q): ");
+                printf("Would you like to choose from a pre-made recipe (R), make your own from a list of ingredients (I),  or Exit (Q): ");
             }
             else {
                 printf("Please enter your choice (R, I, Q): ");
