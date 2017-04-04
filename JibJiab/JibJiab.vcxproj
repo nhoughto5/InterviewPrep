@@ -144,11 +144,13 @@
   <ItemGroup>
     <ClInclude Include="Ingredient.h" />
     <ClInclude Include="Money.h" />
+    <ClInclude Include="Recipe.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ingredient.cpp" />
     <ClCompile Include="Money.cpp" />
+    <ClCompile Include="Recipe.cpp" />
     <ClCompile Include="RecipeCalculator.cpp" />
   </ItemGroup>
   <ItemGroup>

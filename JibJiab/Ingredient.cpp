@@ -63,6 +63,11 @@ std::string Ingredient::toString() const {
     return stream.str() + " " + mUnitOfMeasure + ofStr + orgStr + mName + " = " + mPrice.toString();
 }
 
+float Ingredient::getValue() const {
+    return mQuantity * mPrice.m_value();
+}
+
+
 IngredientType Ingredient::m_type() const {
     return mType;
 }
@@ -81,6 +86,10 @@ std::string Ingredient::m_name() const {
 
 std::string Ingredient::m_unit_of_measure() const {
     return mUnitOfMeasure;
+}
+
+Money Ingredient::m_price() const {
+    return mPrice;
 }
 
 void Ingredient::set_m_quantity(const float quantity) {

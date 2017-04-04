@@ -29,7 +29,13 @@ std::vector<Ingredient> getIngredientList() {
 
     return ret;
 }
+void testUtilMethods() {
+    float tolerance = 0.00001;
+    assert(abs(roundUtil(0.06f) - 0.07f) < tolerance);
+    assert(abs(roundUtil(0.22f) - 0.21f) < tolerance);
 
+    std::cout << "PASS - All util tests passed\n";
+}
 void testMoneyClass() {
     Money m0(.7f);
     Money m1(0.67f);
@@ -75,6 +81,7 @@ void testIngredientClass() {
 void runTestCases() {
     testMoneyClass();
     testIngredientClass();
+    testUtilMethods();
 }
 
 void printHelp() {
@@ -82,6 +89,9 @@ void printHelp() {
     printf("-h                 Help menu\n");
     printf("-s          Start Calculator\n");
     printf("\n\n");
+}
+void printRecipes() {
+    
 }
 void printIngredients() {
     auto i = getIngredientList();
@@ -92,8 +102,15 @@ void printIngredients() {
 }
 
 void closingTasks() {
-    printf("\n\nThanks for using the Recipe Calculator \n\n");
+    printf("\n\nThanks for using the Recipe Calculator, Goodbye! \n\n");
+    exit(0);
 }
+
+
+void handleRecipes() {
+    printRecipes();
+}
+
 int main(int argc, char* argv[]) {
 
     // Allow for visual studio debug flag
@@ -116,10 +133,12 @@ int main(int argc, char* argv[]) {
         printHelp();
         return 0;
     }
+
+    //Start the recipe calculator
     if (argc == 2 && std::find(commandLineArgs.begin(), commandLineArgs.end(), "-s") != commandLineArgs.end()) {
         bool running{ true }, madeMistake{ false };
         printf("\n ============= Welcome to Recipe Calculator ============= \n");
-        do {
+        while(1){
             if(!madeMistake) {
                 printf("Would you like to choose from a pre-made recipe (R), make your own from a list of ingredients (I) or Exit (Q): ");
             }
@@ -131,12 +150,13 @@ int main(int argc, char* argv[]) {
             printf("\n");
             switch (resp) {
             case 'Q':
-                madeMistake = false;
+                closingTasks();
                 break;
             case 'I':
                 madeMistake = false;
                 break;
             case 'R':
+                handleRecipes();
                 madeMistake = false;
                 break;
             default:
@@ -146,16 +166,8 @@ int main(int argc, char* argv[]) {
                 printf("        3.) Exit the program -> Use: Q\n");
                 madeMistake = true;
                 break;
-
             }
-
-            if (resp == 'Q') {
-                closingTasks();
-                return 0;
-            }
-        } while (running);
+        }
     }
-
-
     return 0;
 }

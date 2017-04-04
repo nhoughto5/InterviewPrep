@@ -22,6 +22,7 @@ public:
 
     // Member Methods
     std::string toString() const;
+    float getValue() const;
 
     // Getters
     IngredientType m_type() const;
@@ -29,6 +30,7 @@ public:
     bool organic() const;
     std::string m_name() const;
     std::string m_unit_of_measure() const;
+    Money m_price() const;
 
     // Setters
     void set_m_quantity(const float quantity);
