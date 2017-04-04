@@ -4,7 +4,6 @@
 
 enum IngredientType {Produce, Meat, Pantry, Other};
 
-
 #endif // !UTILITIES_H
 
 

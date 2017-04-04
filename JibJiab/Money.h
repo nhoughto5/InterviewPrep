@@ -25,8 +25,17 @@ public:
 	// will never throw an error
 	Money& operator=(Money&& other) noexcept;
 
+
+    //Operators
 	Money& operator+=(const Money& m);
 	Money& operator-=(const Money& m);
+    Money& operator+=(const float& f);
+    Money& operator-=(const float& f);
+
+    Money& operator*=(const Money& m);
+    Money& operator/=(const Money& m);
+    Money& operator*=(const float& f);
+    Money& operator/=(const float& f);
 
 	// Print the value to a human readable value
 	std::string toString() const;
@@ -35,7 +44,7 @@ public:
 	float m_value() const;
 	void set_m_value(const float value);
 
-	~Money();
+	~Money() = default;
 private:
 	float mValue;
 };

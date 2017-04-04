@@ -84,3 +84,11 @@ std::string Ingredient::m_name() const {
 std::string Ingredient::m_unit_of_measure() const {
     return mUnitOfMeasure;
 }
+
+void Ingredient::set_m_quantity(const float quantity) {
+    mQuantity = quantity;
+}
+
+void Ingredient::set_m_price(const Money& price) {
+    mPrice = price;
+}

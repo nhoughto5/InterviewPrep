@@ -1,6 +1,5 @@
 #pragma once
 #include "Utilities.h"
-#include <string>
 #include <iomanip> // setprecision
 #include "Money.h"
 
@@ -24,6 +23,8 @@ public:
     // Member Methods
     std::string toString() const;
 
+    // Operators
+
 
     // Getters
     IngredientType m_type() const;
@@ -31,6 +32,10 @@ public:
     bool organic() const;
     std::string m_name() const;
     std::string m_unit_of_measure() const;
+
+    // Setters
+    void set_m_quantity(const float quantity);
+    void set_m_price(const Money& price);
 
 private:
 	IngredientType mType;

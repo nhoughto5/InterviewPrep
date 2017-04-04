@@ -43,10 +43,6 @@ void Money::set_m_value(const float value) {
     mValue = value;
 }
 
-
-Money::~Money() {
-}
-
 Money& Money::operator+=(const Money& m) {
     this->mValue += m.m_value();
     return *this;
@@ -57,10 +53,64 @@ Money& Money::operator-=(const Money& m) {
     return *this;
 }
 
+Money& Money::operator+=(const float& f) {
+    this->mValue += f;
+    return *this;
+}
+
+Money& Money::operator-=(const float& f) {
+    this->mValue -= f;
+    return *this;
+}
+
+Money& Money::operator*=(const Money& m) {
+    this->mValue *= m.m_value();
+    return *this;
+}
+
+Money& Money::operator/=(const Money& m) {
+    this->mValue /= m.m_value();
+    return *this;
+}
+
+Money& Money::operator*=(const float& f) {
+    this->mValue *= f;
+    return *this;
+}
+
+Money& Money::operator/=(const float& f) {
+    this->mValue /= f;
+    return *this;
+}
+
+Money operator*(const Money& m1, const Money& m2) {
+    return Money(m1.m_value() * m2.m_value());
+}
+Money operator*(const Money& m1, const float &f) {
+    return Money(m1.m_value() * f);
+}
+Money operator/(const Money& m1, const Money& m2) {
+    return Money(m1.m_value() / m2.m_value());
+}
+Money operator/(const Money& m1, const float &f) {
+    return Money(m1.m_value() / f);
+}
 Money operator+(const Money& m1, const Money& m2) {
     return Money (m1.m_value() + m2.m_value());
+}
+Money operator+(const Money& m1, const float &f) {
+    return Money(m1.m_value() + f);
+}
+Money operator+(const float &f, const Money& m1) {
+    return Money(m1.m_value() + f);
 }
 
 Money operator-(const Money& m1, const Money& m2) {
     return Money (m1.m_value() - m2.m_value());
+}
+Money operator-(const Money& m1, const float &f) {
+    return Money(m1.m_value() - f);
+}
+Money operator-(const float &f, const Money& m1) {
+    return Money(m1.m_value() + f);
 }
