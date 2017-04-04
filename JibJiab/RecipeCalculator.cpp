@@ -2,9 +2,12 @@
 #include <vector>
 #include <assert.h>
 #include <string>
+#include <sstream>
 #include "Utilities.h"
 #include "Ingredient.h"
 #include "Money.h"
+
+
 std::vector<Ingredient> getIngredientList() {
     std::vector<Ingredient> ret;
 
@@ -34,8 +37,8 @@ void testMoneyClass() {
     Money m3;
 
     // Test toString Method
-    assert(m0.toString().compare ("$0.70") == 0);
-    assert(m1.toString().compare ("$0.67") == 0);
+    assert(m0.toString().compare("$0.70") == 0);
+    assert(m1.toString().compare("$0.67") == 0);
     assert(m2.toString().compare("$1.56") == 0);
 
     m3 = m2;
@@ -54,7 +57,7 @@ void testMoneyClass() {
     m3 /= 2.f;
     assert(m3.toString().compare("$1.56") == 0);
 
-    std::cout << "All Money class test cases passed\n";
+    std::cout << "PASS - All Money class test cases passed\n";
 }
 
 void testIngredientClass() {
@@ -67,11 +70,92 @@ void testIngredientClass() {
     garlic = chicken;
     assert(garlic.toString().compare("1.00 Chicken Breast = $2.19") == 0);
 
-    std::cout << "All Ingredient test cases passed\n";
+    std::cout << "PASS - All Ingredient test cases passed\n";
 }
-
-int main() {
+void runTestCases() {
     testMoneyClass();
     testIngredientClass();
+}
+
+void printHelp() {
+    printf("=========== Help ===========\n");
+    printf("-h                 Help menu\n");
+    printf("-s          Start Calculator\n");
+    printf("\n\n");
+}
+void printIngredients() {
+    auto i = getIngredientList();
+    printf("---- List of Ingredients ----");
+    for (Ingredient ingredient : i) {
+        std::cout << ingredient.toString() << "\n";
+    }
+}
+
+void closingTasks() {
+    printf("\n\nThanks for using the Recipe Calculator \n\n");
+}
+int main(int argc, char* argv[]) {
+
+    // Allow for visual studio debug flag
+    // or gcc debug flag
+#if defined(_DEBUG) || defined(DEBUG)
+    std::cout << "\n============= Tests ===============\n";
+    std::cout << "===================================\n\n";
+    runTestCases();
+    std::cout << "\n===================================\n\n";
+#endif
+    std::vector<std::string> commandLineArgs;
+    for (int i = 1; i < argc; ++i) {
+        std::stringstream ss(argv[i]);
+        commandLineArgs.push_back(ss.str());
+        ss.str("");
+    }
+
+    // The help flag was included
+    if (std::find(commandLineArgs.begin(), commandLineArgs.end(), "-h") != commandLineArgs.end()) {
+        printHelp();
+        return 0;
+    }
+    if (argc == 2 && std::find(commandLineArgs.begin(), commandLineArgs.end(), "-s") != commandLineArgs.end()) {
+        bool running{ true }, madeMistake{ false };
+        printf("\n ============= Welcome to Recipe Calculator ============= \n");
+        do {
+            if(!madeMistake) {
+                printf("Would you like to choose from a pre-made recipe (R), make your own from a list of ingredients (I) or Exit (Q): ");
+            }
+            else {
+                printf("Please enter your choice (R, I, Q): ");
+            }
+            char resp;
+            std::cin >> resp;
+            printf("\n");
+            switch (resp) {
+            case 'Q':
+                madeMistake = false;
+                break;
+            case 'I':
+                madeMistake = false;
+                break;
+            case 'R':
+                madeMistake = false;
+                break;
+            default:
+                printf("There are only three options to choose from: \n");
+                printf("        1.) Choose from existing recipes -> Use: R\n");
+                printf("        2.) Make a recipe from a list of ingredients -> Use: I\n");
+                printf("        3.) Exit the program -> Use: Q\n");
+                madeMistake = true;
+                break;
+
+            }
+
+            if (resp == 'Q') {
+                closingTasks();
+                return 0;
+            }
+        } while (running);
+    }
+
+
     return 0;
 }
