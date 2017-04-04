@@ -15,9 +15,6 @@ Ingredient::Ingredient(IngredientType type, float quantity, bool organic, const 
                                                                                                                                                             mPrice (price) {
 }
 
-Ingredient::~Ingredient() {
-}
-
 Ingredient::Ingredient(const Ingredient& other): mType (other.mType),
                                                  mQuantity (other.mQuantity),
                                                  mOrganic (other.mOrganic),
@@ -62,7 +59,8 @@ std::string Ingredient::toString() const {
     std::stringstream stream;
     stream << std::fixed << std::setprecision (2) << mQuantity;
     std::string orgStr = mOrganic ? "organic " : "";
-    return stream.str() + " " + mUnitOfMeasure + " " + orgStr + mName + " = " + mPrice.toString();
+    std::string ofStr = mUnitOfMeasure.empty() ? "" : " of ";
+    return stream.str() + " " + mUnitOfMeasure + ofStr + orgStr + mName + " = " + mPrice.toString();
 }
 
 IngredientType Ingredient::m_type() const {

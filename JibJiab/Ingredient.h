@@ -12,7 +12,7 @@ public:
 
     Ingredient(IngredientType type, float quantity, bool organic, const std::string& name, const std::string& unit_of_measure, const Money& price);
 
-	~Ingredient();
+	~Ingredient() = default;
 
     // Copy and Move
     Ingredient(const Ingredient& other);
@@ -22,9 +22,6 @@ public:
 
     // Member Methods
     std::string toString() const;
-
-    // Operators
-
 
     // Getters
     IngredientType m_type() const;

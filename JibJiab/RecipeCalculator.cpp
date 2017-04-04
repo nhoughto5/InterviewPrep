@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <assert.h>
+#include <string>
 #include "Utilities.h"
 #include "Ingredient.h"
 #include "Money.h"
@@ -56,7 +57,21 @@ void testMoneyClass() {
     std::cout << "All Money class test cases passed\n";
 }
 
+void testIngredientClass() {
+    Ingredient garlic(Produce, 1, true, "Garlic", "clove", Money(0.67f));
+    assert(garlic.toString().compare("1.00 clove of organic Garlic = $0.67") == 0);
+
+    Ingredient chicken(Meat, 1, false, "Chicken Breast", "", Money(2.19f));
+    assert(chicken.toString().compare("1.00 Chicken Breast = $2.19") == 0);
+
+    garlic = chicken;
+    assert(garlic.toString().compare("1.00 Chicken Breast = $2.19") == 0);
+
+    std::cout << "All Ingredient test cases passed\n";
+}
+
 int main() {
     testMoneyClass();
+    testIngredientClass();
     return 0;
 }
