@@ -9,7 +9,6 @@ public:
     ~Recipe();
 
     void addIngredient(Ingredient i);
-    float getGrossTotal();
     float getDiscount();
     float getSalesTax();
     float getTotalCost();

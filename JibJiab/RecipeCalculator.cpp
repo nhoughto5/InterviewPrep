@@ -6,6 +6,7 @@
 #include "Utilities.h"
 #include "Ingredient.h"
 #include "Money.h"
+#include "Recipe.h"
 
 
 std::vector<Ingredient> getIngredientList() {
@@ -27,6 +28,34 @@ std::vector<Ingredient> getIngredientList() {
     ret.push_back(Ingredient(Pantry, 1, false, "Salt", "teaspoon", Money(0.16f)));
     ret.push_back(Ingredient(Pantry, 1, false, "pepper", "teaspoon", Money(0.17f)));
 
+    return ret;
+}
+std::vector<Recipe> initRecipes() {
+    std::vector<Recipe> ret;
+    Recipe r1;
+    r1.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
+    r1.addIngredient(Ingredient(Produce, 1, false, "Lemon", "", Money(2.03f)));
+    r1.addIngredient(Ingredient(Pantry, 0.75f, true, "Olive Oil", "cup", Money(1.92f)));
+    r1.addIngredient(Ingredient(Pantry, 0.75f, false, "Salt", "teaspoon", Money(0.16f)));
+    r1.addIngredient(Ingredient(Pantry, 0.5f, false, "pepper", "teaspoon", Money(0.17f)));
+    ret.push_back(r1);
+
+    Recipe r2;
+    r2.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
+    r2.addIngredient(Ingredient(Meat, 4, false, "Chicken Breast", "", Money(2.19f)));
+    r2.addIngredient(Ingredient(Pantry, 0.5f, true, "Olive Oil", "cup", Money(1.92f)));
+    r2.addIngredient(Ingredient(Pantry, 0.5f, false, "Vinegar", "cup", Money(1.26f)));
+    ret.push_back(r2);
+
+    Recipe r3;
+    r3.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
+    r3.addIngredient(Ingredient(Produce, 4, false, "Corn", "cup", Money(0.87f)));
+    r3.addIngredient(Ingredient(Meat, 4, false, "Bacon", "slices", Money(0.24f)));
+    r3.addIngredient(Ingredient(Pantry, 8, false, "Pasta", "ounce", Money(0.31f)));
+    r3.addIngredient(Ingredient(Pantry, 0.3333f, true, "Olive Oil", "cup", Money(1.92f)));
+    r3.addIngredient(Ingredient(Pantry, 1.25, false, "Salt", "teaspoon", Money(0.16f)));
+    r3.addIngredient(Ingredient(Pantry, 0.75, false, "pepper", "teaspoon", Money(0.17f)));
+    ret.push_back(r3);
     return ret;
 }
 void testUtilMethods() {

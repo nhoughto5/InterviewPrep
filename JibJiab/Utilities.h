@@ -6,7 +6,8 @@
 
 enum IngredientType {Produce, Meat, Pantry, Other};
 const float SALES_TAX = 0.086f;
-const int ROUND_TO = 7;
+const float WELLNESS_DISCOUNT = 0.05f;
+const float ROUND_TO = 0.07f;
 
 inline float roundUtil(float money) {
     return (roundf(money / 0.07f) * 0.07f);
