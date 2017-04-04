@@ -6,6 +6,9 @@ class Recipe
 {
 public:
     Recipe();
+
+    explicit Recipe(const std::string& name);
+
     ~Recipe();
 
     void addIngredient(Ingredient i);
@@ -16,7 +19,14 @@ public:
     std::string printTotalCost();
     std::string printWellnessDiscount();
     std::string printSalesTax();
+
+    void printRecipe() const;
+
+
+    std::string m_name() const;
+
 private:
     std::vector<Ingredient> mIngredients;
+    std::string mName;
 };
 

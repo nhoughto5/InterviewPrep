@@ -1,9 +1,5 @@
 #include "Kitchen.h"
 
-// ======== Define static variables =====//
-std::vector<Ingredient> Kitchen::mIngredients;
-std::vector<Recipe> Kitchen::mRecipes;
-//=======================================//
 
 Kitchen::Kitchen()
 {
@@ -22,16 +18,16 @@ void Kitchen::addRecipe(Recipe& r) {
     mRecipes.push_back(r);
 }
 
-std::vector<Ingredient> Kitchen::m_ingredients() {
+std::vector<Ingredient> Kitchen::m_ingredients() const {
     return mIngredients;
 }
 
-std::vector<Recipe> Kitchen::m_recipes() {
+std::vector<Recipe> Kitchen::m_recipes() const {
     return mRecipes;
 }
 
 void Kitchen::initRecipes() {
-    Recipe r1;
+    Recipe r1("R1");
     r1.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
     r1.addIngredient(Ingredient(Produce, 1, false, "Lemon", "", Money(2.03f)));
     r1.addIngredient(Ingredient(Pantry, 0.75f, true, "Olive Oil", "cup", Money(1.92f)));
@@ -39,14 +35,14 @@ void Kitchen::initRecipes() {
     r1.addIngredient(Ingredient(Pantry, 0.5f, false, "pepper", "teaspoon", Money(0.17f)));
     mRecipes.push_back(r1);
 
-    Recipe r2;
+    Recipe r2("R2");
     r2.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
     r2.addIngredient(Ingredient(Meat, 4, false, "Chicken Breast", "", Money(2.19f)));
     r2.addIngredient(Ingredient(Pantry, 0.5f, true, "Olive Oil", "cup", Money(1.92f)));
     r2.addIngredient(Ingredient(Pantry, 0.5f, false, "Vinegar", "cup", Money(1.26f)));
     mRecipes.push_back(r2);
 
-    Recipe r3;
+    Recipe r3("R3");
     r3.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
     r3.addIngredient(Ingredient(Produce, 4, false, "Corn", "cup", Money(0.87f)));
     r3.addIngredient(Ingredient(Meat, 4, false, "Bacon", "slices", Money(0.24f)));

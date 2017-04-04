@@ -7,6 +7,9 @@
 #include "Ingredient.h"
 #include "Money.h"
 #include "Kitchen.h"
+#include <algorithm>
+
+Kitchen gKitchen;
 
 void testUtilMethods() {
     float tolerance = 0.00001;
@@ -85,7 +88,7 @@ void runTestCases() {
     testMoneyClass();
     testIngredientClass();
     testUtilMethods();
-    testRecipeClass();
+    //testRecipeClass();
 }
 
 void printHelp() {
@@ -95,10 +98,13 @@ void printHelp() {
     printf("\n\n");
 }
 void printRecipes() {
-    
+    printf("==== This Kitchen has the following recipes =====\n");
+    for(auto& i : gKitchen.m_recipes()) {
+        i.printRecipe();
+    }
 }
 void printIngredients() {
-    auto ingredients = Kitchen::m_ingredients();
+    auto ingredients = gKitchen.m_ingredients();
     printf ("---- List of Ingredients ----");
     for (Ingredient ingredient : ingredients) {
         std::cout << ingredient.toString() << "\n";
@@ -110,9 +116,24 @@ void closingTasks() {
     exit(0);
 }
 
-
 void handleRecipes() {
     printRecipes();
+    printf("\n\n Choose a Recipe to Calculate by name: ");
+    std::string chosenRecipe;
+    std::cin >> chosenRecipe;
+    auto v = gKitchen.m_recipes();
+    auto it = std::find_if(v.begin(), v.end(), [&chosenRecipe](const Recipe& obj) {return obj.m_name() == chosenRecipe; });
+
+    if (it != v.end())
+    {
+        //Found the recipe
+        std::cout << "Tax: " << it->printSalesTax() << "\n";
+        std::cout << "Discount: " << it->printWellnessDiscount() << "\n";
+        std::cout << "Total: " << it->printTotalCost() << "\n";
+    }
+    else {
+        printf("There is no recipe by that name\n");
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -142,14 +163,18 @@ int main(int argc, char* argv[]) {
     if (argc == 2 && std::find(commandLineArgs.begin(), commandLineArgs.end(), "-s") != commandLineArgs.end()) {
         bool running{ true }, madeMistake{ false };
         printf("\n ============= Welcome to Recipe Calculator ============= \n");
-        while(1){
+        gKitchen.initKitchen();
+        printf("\n ======= Kitchen Created ======== \n");
+        while(true){
             if(!madeMistake) {
-                printf("Would you like to choose from a pre-made recipe (R), make your own from a list of ingredients (I),  or Exit (Q): ");
+                printf("What would you like to do: \n1.) Choose from a pre-made recipe (R)\n2.) Make your own recipe from a list of ingredients (I)\n3.) Add a new ingredient (A)\n4.) Exit (Q)\n");
+                printf("Enter Your Choice (R, I, A, Q):");
             }
             else {
-                printf("Please enter your choice (R, I, Q): ");
+                printf("Please enter your choice (R, I, A, Q): ");
             }
             char resp;
+            
             std::cin >> resp;
             printf("\n");
             switch (resp) {

@@ -9,18 +9,18 @@ public:
     Kitchen();
     ~Kitchen();
 
-    static void addIngredient(Ingredient& i);
-    static void addRecipe(Recipe& r);
+    void addIngredient(Ingredient& i);
+    void addRecipe(Recipe& r);
 
     // Getters
-    static std::vector<Ingredient> m_ingredients();
-    static std::vector<Recipe> m_recipes();
+    std::vector<Ingredient> m_ingredients() const;
+    std::vector<Recipe> m_recipes() const;
 
     void initKitchen();
 private:
-    static std::vector<Ingredient> mIngredients;
-    static std::vector<Recipe> mRecipes;
-    static void initRecipes();
-    static void initIngredients();
+    std::vector<Ingredient> mIngredients;
+    std::vector<Recipe> mRecipes;
+    void initRecipes();
+    void initIngredients();
 };
 

@@ -1,9 +1,13 @@
 #include "Recipe.h"
 #include <sstream>
+#include <iostream>
 
 
-Recipe::Recipe()
+Recipe::Recipe() : mName{""}
 {
+}
+
+Recipe::Recipe(const std::string& name): mName (name) {
 }
 
 
@@ -51,4 +55,21 @@ std::string Recipe::printWellnessDiscount() {
 
 std::string Recipe::printSalesTax() {
     return Money(getSalesTax()).toString();
+}
+
+void Recipe::printRecipe() const {
+    if(mName.empty()) {
+        printf("RECIPE Name: 'TOP-Seret\n");
+    }
+    else {
+        printf("RECIPE %s\n", mName.c_str());
+    }
+    for(auto& i : mIngredients) {
+        std::cout << i.toString() << "\n";
+    }
+    printf("==============================\n\n");
+}
+
+std::string Recipe::m_name() const {
+    return mName;
 }
