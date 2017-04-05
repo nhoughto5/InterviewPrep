@@ -60,7 +60,7 @@ std::string Ingredient::toString() const {
     stream << std::fixed << std::setprecision (2) << mQuantity;
     std::string orgStr = mOrganic ? "organic " : "";
     std::string ofStr = mUnitOfMeasure.empty() ? "" : " of ";
-    return stream.str() + " " + mUnitOfMeasure + ofStr + orgStr + mName + " = " + mPrice.toString();
+    return stream.str() + " " + mUnitOfMeasure + ofStr + orgStr + mName + " @ " + mPrice.toString();
 }
 
 float Ingredient::getValue() const {

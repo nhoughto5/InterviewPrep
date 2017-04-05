@@ -74,13 +74,13 @@ void testRecipeClass() {
 
 void testIngredientClass() {
     Ingredient garlic(Produce, 1, true, "Garlic", "clove", Money(0.67f));
-    assert(garlic.toString().compare("1.00 clove of organic Garlic = $0.67") == 0);
+    assert(garlic.toString().compare("1.00 clove of organic Garlic @ $0.67") == 0);
 
     Ingredient chicken(Meat, 1, false, "Chicken Breast", "", Money(2.19f));
-    assert(chicken.toString().compare("1.00 Chicken Breast = $2.19") == 0);
+    assert(chicken.toString().compare("1.00 Chicken Breast @ $2.19") == 0);
 
     garlic = chicken;
-    assert(garlic.toString().compare("1.00 Chicken Breast = $2.19") == 0);
+    assert(garlic.toString().compare("1.00 Chicken Breast @ $2.19") == 0);
 
     std::cout << "PASS - All Ingredient test cases passed\n";
 }
@@ -105,9 +105,11 @@ void printRecipes() {
 }
 void printIngredients() {
     auto ingredients = gKitchen.m_ingredients();
-    printf ("---- List of Ingredients ----");
+    printf ("---- List of Ingredients ----\n\n");
+    int i{ 1 };
     for (Ingredient ingredient : ingredients) {
-        std::cout << ingredient.toString() << "\n";
+        std::cout << "\t" << i << ".) "<< ingredient.toString() << "\n";
+        ++i;
     }
     printf("\n\n");
 }
@@ -116,7 +118,46 @@ void closingTasks() {
     printf("\n\nThanks for using the Recipe Calculator, Goodbye! \n\n");
     exit(0);
 }
+void makeNewRecipe() {
+    printf("---- Make a new recipe! ----");
+    printIngredients();
 
+    printf("What is this recipe called: ");
+    std::string name;
+    std::cin >> name;
+    Recipe newRecipe(name);
+    printf("Pick ingredients by the numbers above (Enter 0 for done)!\n\n");
+    int entry{0};
+    bool addToKitchen = false;
+    do {
+        printf("Ingredient #: ");
+        std::cin >> entry;
+        if(entry != 0) {
+            if (entry <= gKitchen.m_ingredients().size()) {
+                Ingredient temp = gKitchen.getIngredientByNumber(entry - 1);
+                std::cout << "You picked: " << temp.m_name() << "\nHow many " << temp.m_unit_of_measure() << "s in this recipe? ";
+                float quantity;
+                std::cin >> quantity;
+                temp.set_m_quantity(quantity);
+                std::cout << "Added " << quantity << " " << temp.m_unit_of_measure() << "s to " << newRecipe.m_name() << "\n\n";
+                addToKitchen = true;
+                newRecipe.addIngredient(temp);
+            }else {
+                printf("Thats not an ingredient number!\n");
+            }
+        }
+    } while (entry != 0);
+
+    if(addToKitchen) {
+        printf("Recipe Added!\n");
+        newRecipe.printRecipe();
+        gKitchen.addRecipe(newRecipe);
+    }
+    else {
+        printf("No new recipe added\n");
+    }
+    
+}
 void handleNewIngredient() {
     printf("\n\n Add a new ingredient to the kitchen!\n\n");
     printf("\nWhat's the name of the ingredient: ");
@@ -230,6 +271,9 @@ int main(int argc, char* argv[]) {
                 printIngredients();
                 break;
             case 'I':
+                makeNewRecipe();
+                break;
+            case 'A':
                 handleNewIngredient();
                 madeMistake = false;
                 break;

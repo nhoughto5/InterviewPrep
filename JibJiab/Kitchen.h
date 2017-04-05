@@ -15,7 +15,7 @@ public:
     // Getters
     std::vector<Ingredient> m_ingredients() const;
     std::vector<Recipe> m_recipes() const;
-
+    Ingredient getIngredientByNumber(int i);
     void initKitchen();
 private:
     std::vector<Ingredient> mIngredients;

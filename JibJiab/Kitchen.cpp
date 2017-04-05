@@ -26,6 +26,10 @@ std::vector<Recipe> Kitchen::m_recipes() const {
     return mRecipes;
 }
 
+Ingredient Kitchen::getIngredientByNumber(int i) {
+    return mIngredients[i];
+}
+
 void Kitchen::initRecipes() {
     Recipe r1("R1");
     r1.addIngredient(Ingredient(Produce, 1, true, "Garlic", "clove", Money(0.67f)));
