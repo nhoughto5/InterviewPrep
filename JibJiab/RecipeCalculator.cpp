@@ -245,7 +245,7 @@ int main(int argc, char* argv[]) {
 
     //Start the recipe calculator
     if (argc == 2 && std::find(commandLineArgs.begin(), commandLineArgs.end(), "-s") != commandLineArgs.end()) {
-        bool running{ true }, madeMistake{ false };
+        bool madeMistake{ false };
         printf("\n ============= Welcome to Recipe Calculator ============= \n");
         gKitchen.initKitchen();
         printf("\n ======= Kitchen Created ======== \n");
