@@ -11,6 +11,10 @@ const float WELLNESS_DISCOUNT = 0.05f;
 inline float roundUpUtil(float money, float round) {
     return (ceil(money / round) * round);
 }
+
+inline float roundUtil(float money, float round) {
+    return (roundf(money / round) * round);
+}
 #endif // !UTILITIES_H
 
 

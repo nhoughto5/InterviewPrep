@@ -24,13 +24,13 @@ float Recipe::getTotalCost() {
     for (auto& i : mIngredients) {
         total += i.m_quantity() * i.m_price().m_value();
     }
-    return total + getSalesTax() - getDiscount();
+    return roundUpUtil(total + getSalesTax() - getDiscount(), 0.01f);
 }
 
 float Recipe::getDiscount() {
     float total{ 0.0f };
     for (auto& i : mIngredients) {
-        total += i.organic() ? 0.0f : i.getValue() * WELLNESS_DISCOUNT;
+        total += i.organic() ? i.getValue() * WELLNESS_DISCOUNT : 0.0f;
     }
     return roundUpUtil (total, 0.01f);
 }

@@ -88,7 +88,7 @@ void runTestCases() {
     testMoneyClass();
     testIngredientClass();
     testUtilMethods();
-    //testRecipeClass();
+    testRecipeClass();
 }
 
 void printHelp() {
@@ -109,11 +109,54 @@ void printIngredients() {
     for (Ingredient ingredient : ingredients) {
         std::cout << ingredient.toString() << "\n";
     }
+    printf("\n\n");
 }
 
 void closingTasks() {
     printf("\n\nThanks for using the Recipe Calculator, Goodbye! \n\n");
     exit(0);
+}
+
+void handleNewIngredient() {
+    printf("\n\n Add a new ingredient to the kitchen!\n\n");
+    printf("\nWhat's the name of the ingredient: ");
+    std::string name;
+    std::cin >> name;
+    printf("\nIs it organic? (Y/N): ");
+    char c;
+    std::cin >> c;
+    bool organic = c == 'Y' ? true : false;
+    printf("\nWhat is it's unit of measurement? (cup, ounce, slice...etc): ");
+    std::string um;
+    std::cin >> um;
+    bool g{true};
+    float quantity{0.0f};
+    do {
+        std::cout << "\nHow many " << um << " do you have: ";
+        std::string q;
+        std::cin >> q;
+        try {
+            quantity = std::stof(q);
+            g = false;
+        }
+        catch (std::invalid_argument e) {
+            printf("That is not a valid number, try again.\n");
+        }
+    } while (g);
+    printf("\nIs it: Produce (0), Meat (1), or from the Pantry (2): ");
+    int typeInt;
+    std::cin >> typeInt;
+    IngredientType type = static_cast<IngredientType> (typeInt);
+
+    std::cout << "\nHow much does it cost per " << um << ": ";
+    std::string costStr;
+    std::cin >> costStr;
+    float cost = std::stof(costStr);
+    Ingredient temp(type, quantity, organic, name, um, Money(cost));
+    std::cout << "New Ingredient: " << temp.toString();
+
+    gKitchen.addIngredient(temp);
+    printf("\n\nIngredient Added!\n\n");
 }
 
 void handleRecipes() {
@@ -129,7 +172,7 @@ void handleRecipes() {
         //Found the recipe
         std::cout << "Tax: " << it->printSalesTax() << "\n";
         std::cout << "Discount: " << it->printWellnessDiscount() << "\n";
-        std::cout << "Total: " << it->printTotalCost() << "\n";
+        std::cout << "Total: " << it->printTotalCost() << "\n\n\n\n";
     }
     else {
         printf("There is no recipe by that name\n");
@@ -166,12 +209,14 @@ int main(int argc, char* argv[]) {
         gKitchen.initKitchen();
         printf("\n ======= Kitchen Created ======== \n");
         while(true){
+
+            //The madeMistake flag is used to set what output to print
             if(!madeMistake) {
-                printf("What would you like to do: \n1.) Choose from a pre-made recipe (R)\n2.) Make your own recipe from a list of ingredients (I)\n3.) Add a new ingredient (A)\n4.) Exit (Q)\n");
-                printf("Enter Your Choice (R, I, A, Q):");
+                printf("**** What would you like to do: **** \n1.) Choose from a pre-made recipe (R)\n2.) Make your own recipe from a list of ingredients (I)\n3.) Add a new ingredient (A)\n4.) Print the list of available ingredients (L)\n5.) Exit (Q)\n");
+                printf("Enter Your Choice (R, I, A, L, Q):");
             }
             else {
-                printf("Please enter your choice (R, I, A, Q): ");
+                printf("Please enter your choice (R, I, A, L, Q): ");
             }
             char resp;
             
@@ -181,7 +226,11 @@ int main(int argc, char* argv[]) {
             case 'Q':
                 closingTasks();
                 break;
+            case 'L':
+                printIngredients();
+                break;
             case 'I':
+                handleNewIngredient();
                 madeMistake = false;
                 break;
             case 'R':
